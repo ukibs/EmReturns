@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 0a715803695d90a478352381d8716c55
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Optimus Hollow
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: b1e1d4cafc076d54594dcc1ca03ccb73, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
