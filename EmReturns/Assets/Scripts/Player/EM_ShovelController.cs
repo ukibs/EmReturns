@@ -14,6 +14,7 @@ public class EM_ShovelController : MonoBehaviour
         LoadingPulseShot,
         Sprint,
         VerticalImpulse,
+        RapidFire,
 
         Count
     }
@@ -111,6 +112,9 @@ public class EM_ShovelController : MonoBehaviour
                     break;
                 case ShovelsState.VerticalImpulse:
                     ApplyVerticalForce();
+                    break;
+                case ShovelsState.RapidFire:
+                    // TODO: Update rapid fire
                     break;
             }
         }               
