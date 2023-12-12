@@ -97,11 +97,11 @@ public class CameraController : MonoBehaviour
         //Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
         float nearestToCenter = Mathf.Infinity;
         //
-        Objective[] possibleObjectives = FindObjectsOfType<Objective>();
+        LockableObjective[] possibleObjectives = FindObjectsOfType<LockableObjective>();
         for (int i = 0; i < possibleObjectives.Length; i++)
         {
             //
-            if (hasHookedRb && possibleObjectives[i].type == Objective.Type.Scenario)
+            if (hasHookedRb && possibleObjectives[i].type == LockableObjective.Type.Scenario)
                 continue;
             //
             if (possibleObjectives[i] == EM_ShovelController.Instance.HookedObjective)
@@ -134,9 +134,9 @@ public class CameraController : MonoBehaviour
         //
         float stickAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         //
-        Objective[] possibleObjectives = FindObjectsOfType<Objective>();
+        LockableObjective[] possibleObjectives = FindObjectsOfType<LockableObjective>();
         //
-        Objective currentObjective = playerController.currentObjective.GetComponent<Objective>();
+        LockableObjective currentObjective = playerController.currentObjective.GetComponent<LockableObjective>();
         //
         for (int i = 0; i < possibleObjectives.Length; i++)
         {

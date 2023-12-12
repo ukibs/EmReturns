@@ -64,12 +64,12 @@ public class EM_ShovelController : MonoBehaviour
     //
     public static EM_ShovelController Instance { get { return instance; } }
     public float LoadAmount { get { return loadAmount; } }
-    public Objective HookedObjective
+    public LockableObjective HookedObjective
     {
         get
         {
             if (!hookedRb) return null;
-            Objective hookedObjective = hookedRb.GetComponent<Objective>();
+            LockableObjective hookedObjective = hookedRb.GetComponent<LockableObjective>();
             return hookedObjective;
         }
     }
