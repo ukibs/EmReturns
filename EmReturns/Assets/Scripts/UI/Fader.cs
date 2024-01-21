@@ -12,7 +12,7 @@ public class Fader : MonoBehaviour
 
     //
     private Image image;
-    private bool isPlaying = false;
+    //private bool isPlaying = false;
     private float currentFade;
 
     // Start is called before the first frame update

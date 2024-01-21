@@ -19,6 +19,7 @@ public class EM_PlayerController : MonoBehaviour
     public float dashForce = 25;
     [Header("HUD")]
     public RectTransform objectiveMarker;
+    public RectTransform hazardMarker;
     public Image shieldBarBack;
     public Image shieldBarFront;
     public Image finisherBarBack;
@@ -120,6 +121,7 @@ public class EM_PlayerController : MonoBehaviour
                 case EM_ShovelController.ShovelsState.LoadingPulseShot:
                 case EM_ShovelController.ShovelsState.Sprint:
                 case EM_ShovelController.ShovelsState.VerticalImpulse:
+                case EM_ShovelController.ShovelsState.RapidFire:
                     //UpdateMovement(gamepad);
                     UpdateMovement();
                     break;
@@ -183,6 +185,9 @@ public class EM_PlayerController : MonoBehaviour
             CheckObjective();
         }
 
+        //
+        CheckHazards();
+
         // Si el finisher est activo solo puedes fijar la cabeza
         if(!finisherActive)
             UpdateObjectiveMangement();
@@ -232,6 +237,11 @@ public class EM_PlayerController : MonoBehaviour
                     shovelController.ChangeShovelsPosition(EM_ShovelController.ShovelsState.LoadingPulseShot);
                 }
                 //
+                if (InputController.Instance.RapidFirePressed)
+                {
+                    shovelController.ChangeShovelsPosition(EM_ShovelController.ShovelsState.RapidFire);
+                }
+                //
                 if (InputController.Instance.SprintPressed)
                 {
                     shovelController.ChangeShovelsPosition(EM_ShovelController.ShovelsState.Sprint);
@@ -279,6 +289,13 @@ public class EM_PlayerController : MonoBehaviour
             case EM_ShovelController.ShovelsState.VerticalImpulse:
                 //
                 if (InputController.Instance.JumpReleased)
+                {
+                    shovelController.ReturnShovelsToIdle();
+                }
+                break;
+            case EM_ShovelController.ShovelsState.RapidFire:
+                //
+                if (InputController.Instance.RapidFireReleased)
                 {
                     shovelController.ReturnShovelsToIdle();
                 }
@@ -365,14 +382,32 @@ public class EM_PlayerController : MonoBehaviour
             else
             {
                 //currentObjective = FindObjectOfType<Objective>().transform;
-                currentObjective = cameraController.GetNearestObjectiveToScreenCenter(shovelController.hookedRb);
+                currentObjective = cameraController.GetNearestObjectiveToScreenCenter<LockableObjective>(shovelController.hookedRb);
             }            
+        }
+    }
+
+    void CheckHazards()
+    {
+        Transform nearestHazard = cameraController.GetNearestObjectiveToScreenCenter<Hazard>(shovelController.hookedRb);
+        if(nearestHazard != null)
+        {
+            Vector3 nearestHazardScreenPosition = Camera.main.WorldToViewportPoint(nearestHazard.position);
+            hazardMarker.anchoredPosition = new Vector2((nearestHazardScreenPosition.x - 0.5f) * (Screen.width / 2), (nearestHazardScreenPosition.y - 0.5f) * (Screen.height / 2));
+            hazardMarker.gameObject.SetActive(true);
+        }
+        else
+        {
+            hazardMarker.gameObject.SetActive(false);
         }
     }
 
     void CheckAndLook(Vector3 movementDirection)
     {
-        if (currentObjective && shovelController.currentShovelsState == EM_ShovelController.ShovelsState.LoadingPulseShot)
+        if (currentObjective && 
+            (shovelController.currentShovelsState == EM_ShovelController.ShovelsState.LoadingPulseShot ||
+            shovelController.currentShovelsState == EM_ShovelController.ShovelsState.RapidFire)
+            ) 
         {
             transform.LookAt(currentObjective);
         }

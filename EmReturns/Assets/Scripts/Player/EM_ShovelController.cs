@@ -34,6 +34,7 @@ public class EM_ShovelController : MonoBehaviour
     public GameObject energyPulseAttackPrefab;
     public GameObject powerTrail;
     public GameObject finisherEnergyBall;
+    public GameObject rapidFirePrefab;
     [Header("Canvas")]
     public Image loadBar;
     [Header("Feedback")]
@@ -353,6 +354,11 @@ public class EM_ShovelController : MonoBehaviour
                     powerTrail.SetActive(true);
                     AudioManager.Instance.PlayLoadFx(propulsionClip, true, 1);
                     break;
+                case ShovelsState.RapidFire:
+                    Debug.Log("Starting rapid fire");
+                    currentShovelPosturePositions = shovelPosturesPositions[1];
+                    StartCoroutine(RapidFireCoroutine());
+                    break;
             }
             //
             for (int i = 0; i < shovels.Length; i++)
@@ -420,6 +426,20 @@ public class EM_ShovelController : MonoBehaviour
             {
                 Destroy(hookedRb.gameObject);
             }
+        }
+    }
+
+    IEnumerator RapidFireCoroutine()
+    {
+        Debug.Log("Starting rapid fire coroutine: " + currentShovelsState.ToString());
+        yield return new WaitForSeconds(0.1f);
+        while (currentShovelsState == ShovelsState.RapidFire)
+        {
+            GameObject newRapidFireBullet = Instantiate(rapidFirePrefab, hookedRbPoint.position, hookedRbPoint.rotation);
+            Rigidbody bulletRB = newRapidFireBullet.GetComponent<Rigidbody>();
+            bulletRB.AddForce(transform.forward * 50, ForceMode.Impulse);
+            Debug.Log("Shooting rapid fire proyectile");
+            yield return new WaitForSeconds(0.1f);
         }
     }
 }

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5219488267639990753}
   - component: {fileID: 5219488267639990762}
   - component: {fileID: 5415010982452860543}
+  - component: {fileID: -3431373196088484480}
   m_Layer: 8
   m_Name: Enemy Energy Ball
   m_TagString: Untagged
@@ -132,6 +133,7 @@ MonoBehaviour:
   explosionForce: 50
   forceTowardsPlayer: 200
   checkDistance: 0
+  timeToExplode: 15
 --- !u!96 &5415010982452860543
 TrailRenderer:
   serializedVersion: 2
@@ -239,3 +241,16 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &-3431373196088484480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5219488267639990752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5489e97111e2c64a99d20d1cea47243, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0

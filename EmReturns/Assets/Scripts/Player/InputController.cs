@@ -118,6 +118,45 @@ public class InputController : MonoBehaviour
         }
     }
 
+    // Rapid fire
+    public bool RapidFirePressed
+    {
+        get
+        {
+            if (gamepad != null)
+            {
+                return gamepad.leftTrigger.wasPressedThisFrame;
+            }
+            else if (mouse != null)
+            {
+                return mouse.middleButton.wasPressedThisFrame;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    public bool RapidFireReleased
+    {
+        get
+        {
+            if (gamepad != null)
+            {
+                return gamepad.leftTrigger.wasReleasedThisFrame;
+            }
+            else if (mouse != null)
+            {
+                return mouse.middleButton.wasReleasedThisFrame;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
     // Grapple
     public bool GrapplePressed
     {

@@ -90,14 +90,14 @@ public class CameraController : MonoBehaviour
         transform.rotation = currentRotation;
     }
 
-    public Transform GetNearestObjectiveToScreenCenter(bool hasHookedRb)
+    public Transform GetNearestObjectiveToScreenCenter<T>(bool hasHookedRb) where T : LockableObjective
     {
         //
         Transform selectedObjective = null;
         //Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
         float nearestToCenter = Mathf.Infinity;
         //
-        LockableObjective[] possibleObjectives = FindObjectsOfType<LockableObjective>();
+        T[] possibleObjectives = FindObjectsOfType<T>();
         for (int i = 0; i < possibleObjectives.Length; i++)
         {
             //
