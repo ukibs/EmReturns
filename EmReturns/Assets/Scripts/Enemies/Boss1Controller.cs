@@ -36,7 +36,8 @@ public class Boss1Controller : MonoBehaviour
     public float energyShieldPreparation = 2;
     public float energyShieldDuration = 5;
     [Header("Behaviours")]
-    public AudioClip combatMusic;
+    public AudioClip[] combatMusic;
+    public float[] combatMusicVolumes;
     //public BossBehaviourSO[] bossBehaviours;
     public BossPhaseSO[] bossPhases;
     [Header("Materials")]
@@ -302,7 +303,7 @@ public class Boss1Controller : MonoBehaviour
         if (!aggresive)
         {
             aggresive = true;
-            AudioManager.Instance.PlayMusic(combatMusic, 0.3f, true);
+            AudioManager.Instance.PlayMusic(combatMusic[0], 0.3f, true);
             GoToNextBehaviour();
         }
         //
@@ -373,6 +374,7 @@ public class Boss1Controller : MonoBehaviour
             ResetSegments();
             StartCoroutine(WaitAndActivateFloatingBodies());
             //AudioManager.Instance.Play2dFx(endPhaseExplosion.transform.position, endPhaseExplosion)
+            AudioManager.Instance.PlayMusic(combatMusic[currentPhase], combatMusicVolumes[currentPhase], true);
         }
     }
 

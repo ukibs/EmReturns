@@ -14,6 +14,9 @@ public class Boss1SegmentController : MonoBehaviour
     public GameObject energyBallPrefab;
     public AudioClip shootClip;
     public Boss1ForceField forceField;
+    public GameObject healthMarkerPrefab;
+    //public Canvas canvas;
+    public RectTransform healthMarkersPanel;
     [Header("Parameters")]
     public float launchForce = 300f;
     public float shootMaxOffset = 10f;
@@ -23,6 +26,7 @@ public class Boss1SegmentController : MonoBehaviour
     public MeshRenderer[] shaderMeshRenderers;
     [Header("Feedback")]
     public AudioClip onDamageClip;
+    public AudioClip onImpactClip;
     [Header("Extra")]
     public GameObject finisherChargerPrefab;
 
@@ -33,10 +37,11 @@ public class Boss1SegmentController : MonoBehaviour
     private Rigidbody rb;
     private Vector3 idealDistanceToObjective;
     private Transform connectionPointObjective;
-    private bool damaged = false;
+    [HideInInspector]public bool damaged = false;
     private Boss1EnergyBall[] currentEnergyBalls;
     private bool dead = false;
     private int currentHealth;
+    private HealthMarkerController healthMarkerController;
 
     //
     [HideInInspector] public bool Damaged { get { return damaged; } }
@@ -47,6 +52,9 @@ public class Boss1SegmentController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         currentEnergyBalls = new Boss1EnergyBall[4];
         currentHealth = maxHealth;
+        healthMarkerController = Instantiate(healthMarkerPrefab, healthMarkersPanel).GetComponent<HealthMarkerController>();
+        healthMarkerController.SetHealthController(this);
+        //healthMarkerController.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -134,10 +142,25 @@ public class Boss1SegmentController : MonoBehaviour
                     GameObject newFinisherCharger = Instantiate(finisherChargerPrefab, transform.position, Quaternion.identity);
                     newFinisherCharger.transform.eulerAngles = new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360));
                 }
+                //
+                if (healthMarkerController)
+                {
+                    //Destroy(healthMarkerController.gameObject);
+                    //healthMarkerController = null;
+                    healthMarkerController.gameObject.SetActive(false);
+                }
             }
             else
             {
                 // TODO: Poner otro audio
+                AudioManager.Instance.Play2dFx(transform.position, onImpactClip, 0.8f);
+                //if (!healthMarkerController)
+                //{
+                //    healthMarkerController = Instantiate(healthMarkerPrefab, canvas.transform).GetComponent<HealthMarkerController>();
+                //    healthMarkerController.SetHealthController(this);                    
+                //}
+                healthMarkerController.gameObject.SetActive(true);
+                healthMarkerController.UpdateValue(currentHealth, maxHealth);
             }
 
         }        
@@ -186,30 +209,31 @@ public class Boss1SegmentController : MonoBehaviour
         currentEnergyBalls[ballIndex].transform.parent = null;
 
         Rigidbody rb = currentEnergyBalls[ballIndex].GetComponent<Rigidbody>();
-        Vector3 objectivePosition = EM_PlayerController.Instance.transform.position;
+        //Vector3 objectivePosition = EM_PlayerController.Instance.transform.position;
 
         float shotSpeed = launchForce / rb.mass;
 
         // Primera pasada de estimación
-        float estimatedImpactTime = GeneralFunctions.EstimateTimeBetweenTwoPoints(objectivePosition, launchPositions[0].position, shotSpeed);
-        Vector3 estimatedObjectivePosition =
-            GeneralFunctions.EstimateFuturePosition(objectivePosition, EM_PlayerController.Instance.Rb.velocity, estimatedImpactTime);
+        //float estimatedImpactTime = GeneralFunctions.EstimateTimeBetweenTwoPoints(objectivePosition, launchPositions[0].position, shotSpeed);
+        //Vector3 estimatedObjectivePosition =
+        //    GeneralFunctions.EstimateFuturePosition(objectivePosition, EM_PlayerController.Instance.Rb.velocity, estimatedImpactTime);
 
         // Segunda pasada de estimación
-        estimatedImpactTime = GeneralFunctions.EstimateTimeBetweenTwoPoints(estimatedObjectivePosition, launchPositions[0].position, shotSpeed);
-        estimatedObjectivePosition =
-            GeneralFunctions.EstimateFuturePosition(estimatedObjectivePosition, EM_PlayerController.Instance.Rb.velocity, estimatedImpactTime);
+        //estimatedImpactTime = GeneralFunctions.EstimateTimeBetweenTwoPoints(estimatedObjectivePosition, launchPositions[0].position, shotSpeed);
+        //estimatedObjectivePosition =
+        //    GeneralFunctions.EstimateFuturePosition(estimatedObjectivePosition, EM_PlayerController.Instance.Rb.velocity, estimatedImpactTime);
 
         // Offset random para dispersar la rafaga
-        float smo = shootMaxOffset;
-        estimatedObjectivePosition += new Vector3(Random.Range(-smo, smo), Random.Range(-smo, smo), Random.Range(-smo, smo));
-        Vector3 direction = estimatedObjectivePosition - launchPositions[ballIndex].position;
+        //float smo = shootMaxOffset;
+        //estimatedObjectivePosition += new Vector3(Random.Range(-smo, smo), Random.Range(-smo, smo), Random.Range(-smo, smo));
+        //Vector3 direction = estimatedObjectivePosition - launchPositions[ballIndex].position;
 
         
-        rb.AddForce(direction.normalized * launchForce, ForceMode.Impulse);
+        rb.AddForce(launchPositions[ballIndex].forward * launchForce, ForceMode.Impulse);
 
         Boss1EnergyBall energyBall = currentEnergyBalls[ballIndex].GetComponent<Boss1EnergyBall>();
-        energyBall.Activate(estimatedImpactTime);
+        //energyBall.Activate(estimatedImpactTime);
+        energyBall.Activate();
 
         AudioManager.Instance.Play3dFx(launchPositions[ballIndex].position, shootClip, 0.3f);
 

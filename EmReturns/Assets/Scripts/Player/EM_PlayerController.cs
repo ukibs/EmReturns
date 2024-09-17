@@ -20,6 +20,7 @@ public class EM_PlayerController : MonoBehaviour
     [Header("HUD")]
     public RectTransform objectiveMarker;
     public RectTransform hazardMarker;
+    public RectTransform usableMarker;
     public Image shieldBarBack;
     public Image shieldBarFront;
     public Image finisherBarBack;
@@ -40,12 +41,14 @@ public class EM_PlayerController : MonoBehaviour
 
     //
     [HideInInspector] public Transform currentObjective = null;
+    [HideInInspector] public Transform nearestHazard = null;
+    [HideInInspector] public Transform nearestUsable = null;
 
     //
     private static EM_PlayerController instance;
     private Rigidbody rb;
     private EM_ShovelController shovelController;
-    private CameraController cameraController;
+    [HideInInspector] public CameraController cameraController;
 
     private bool objectiveChangeAllowed = true;
     private Transform testObjective = null;
@@ -187,9 +190,18 @@ public class EM_PlayerController : MonoBehaviour
 
         //
         CheckHazards();
+        //
+        if (shovelController.hookedRb == null)
+        {
+            CheckUsables();
+        }
+        else
+        {
+            usableMarker.gameObject.SetActive(false);
+        }
 
         // Si el finisher est activo solo puedes fijar la cabeza
-        if(!finisherActive)
+        if (!finisherActive)
             UpdateObjectiveMangement();
 
         //if (gamepad.startButton.wasPressedThisFrame)
@@ -322,7 +334,7 @@ public class EM_PlayerController : MonoBehaviour
             if (objectiveChangeAllowed && InputController.Instance.CameraAxis.sqrMagnitude > 0.25)
             {
                 //cameraController
-                currentObjective = cameraController.ChangeObjective(InputController.Instance.CameraAxis);
+                currentObjective = cameraController.ChangeBossSegmentObjective(InputController.Instance.CameraAxis);
                 StartCoroutine(WaitAndAllowObjectiveChange());
                 //testObjective = cameraController.ChangeObjective(gamepad.rightStick.ReadValue());
             }
@@ -382,18 +394,20 @@ public class EM_PlayerController : MonoBehaviour
             else
             {
                 //currentObjective = FindObjectOfType<Objective>().transform;
-                currentObjective = cameraController.GetNearestObjectiveToScreenCenter<LockableObjective>(shovelController.hookedRb);
+                //currentObjective = cameraController.GetNearestObjectiveToScreenCenter<LockableObjective>(shovelController.hookedRb);
+                currentObjective = cameraController.GetNearestBossSectionToScreenCenter();
             }            
         }
     }
 
     void CheckHazards()
     {
-        Transform nearestHazard = cameraController.GetNearestObjectiveToScreenCenter<Hazard>(shovelController.hookedRb);
+        nearestHazard = cameraController.GetNearestObjectiveToScreenCenter<Hazard>(shovelController.hookedRb);
         if(nearestHazard != null)
         {
-            Vector3 nearestHazardScreenPosition = Camera.main.WorldToViewportPoint(nearestHazard.position);
-            hazardMarker.anchoredPosition = new Vector2((nearestHazardScreenPosition.x - 0.5f) * (Screen.width / 2), (nearestHazardScreenPosition.y - 0.5f) * (Screen.height / 2));
+            Vector3 nearestHazardScreenPosition = Camera.main.WorldToScreenPoint(nearestHazard.position);
+            //hazardMarker.anchoredPosition = new Vector2((nearestHazardScreenPosition.x - 0.5f) * (Screen.width / 2), (nearestHazardScreenPosition.y - 0.5f) * (Screen.height / 2));
+            hazardMarker.anchoredPosition = nearestHazardScreenPosition;
             hazardMarker.gameObject.SetActive(true);
         }
         else
@@ -402,16 +416,45 @@ public class EM_PlayerController : MonoBehaviour
         }
     }
 
+    void CheckUsables()
+    {
+        nearestUsable = cameraController.GetNearestObjectiveToScreenCenter<Scenario>(shovelController.hookedRb);
+        if (nearestUsable != null)
+        {
+            Vector3 nearestUsableScreenPosition = Camera.main.WorldToScreenPoint(nearestUsable.position);
+            //usableMarker.anchoredPosition = new Vector2((nearestUsableScreenPosition.x - 0.5f) * (Screen.width / 2), (nearestUsableScreenPosition.y - 0.5f) * (Screen.height / 2));
+            usableMarker.anchoredPosition = nearestUsableScreenPosition;
+            usableMarker.gameObject.SetActive(true);
+        }
+        else
+        {
+            usableMarker.gameObject.SetActive(false);
+        }
+    }
+
     void CheckAndLook(Vector3 movementDirection)
     {
-        if (currentObjective && 
+        if (nearestHazard && shovelController.currentShovelsState == EM_ShovelController.ShovelsState.RapidFire)
+        {
+            Rigidbody rapidFireRb = shovelController.rapidFirePrefab.GetComponent<Rigidbody>();
+            Rigidbody hazardRb = nearestHazard.gameObject.GetComponent<Rigidbody>();
+            float timeToReach = GeneralFunctions.EstimateTimeBetweenTwoPoints(
+                transform.position, nearestHazard.position, shovelController.rapidFireForce / rapidFireRb.mass);
+            Debug.Log("Time to reach: " + timeToReach);
+            Vector3 hazardFuturePosition = GeneralFunctions.EstimateFuturePosition(nearestHazard.position, hazardRb.velocity, timeToReach);
+            transform.LookAt(hazardFuturePosition);
+        }
+        else if (currentObjective && 
             (shovelController.currentShovelsState == EM_ShovelController.ShovelsState.LoadingPulseShot ||
             shovelController.currentShovelsState == EM_ShovelController.ShovelsState.RapidFire)
             ) 
         {
             transform.LookAt(currentObjective);
         }
-        else if (shovelController.currentShovelsState == EM_ShovelController.ShovelsState.LoadingPulseShot)
+        else if (
+            shovelController.currentShovelsState == EM_ShovelController.ShovelsState.LoadingPulseShot || 
+            shovelController.currentShovelsState == EM_ShovelController.ShovelsState.RapidFire
+        )
         {
             if (cameraController.objectiveInCenter)
             {

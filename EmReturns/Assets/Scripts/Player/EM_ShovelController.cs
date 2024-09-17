@@ -24,6 +24,7 @@ public class EM_ShovelController : MonoBehaviour
     public float hookForce = 100;
     public float pulseForce = 1000;
     public float sprintForce = 100;
+    public float rapidFireForce = 50;
     [Header("Components")]
     public Transform[] shovels;
     //public Transform shovelHookAnchor;
@@ -42,6 +43,7 @@ public class EM_ShovelController : MonoBehaviour
     public AudioClip propulsionClip;
     public AudioClip shootClip;
     public AudioClip grabClip;
+    public AudioClip rapidFireClip;
     [Header("Debug")]
     public TMP_Text grabbingDistanceIndicator;
 
@@ -170,8 +172,19 @@ public class EM_ShovelController : MonoBehaviour
     public bool CheckGrabbingPoint()
     {
         //
-        RaycastHit hitInfo;        
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hitInfo)){
+        RaycastHit hitInfo;
+        // TODO: Cambiar la dirección segun haya usables marcados
+        Vector3 direction = Camera.main.transform.forward;
+        if(EM_PlayerController.Instance.currentObjective != null)
+        {
+            direction = Camera.main.transform.forward;
+        }
+        else if(EM_PlayerController.Instance.nearestUsable != null)
+        {
+            direction = EM_PlayerController.Instance.nearestUsable.position - Camera.main.transform.position;
+        }
+        //
+        if (Physics.Raycast(Camera.main.transform.position, direction, out hitInfo)){
             //
             //Debug.Log("Checking grabbing point: " + hitInfo.transform.gameObject.name + " - layer: " + hitInfo.transform.gameObject.layer);
             //Debug.Log("Checking grabbing point: " + hitInfo.collider.gameObject.name + " - layer: " + hitInfo.collider.gameObject.layer);
@@ -226,7 +239,8 @@ public class EM_ShovelController : MonoBehaviour
                 hookedRbPoint.localPosition = new Vector3(0, 0, (hookedRb.transform.localScale.y + 3) * 0.05f);
                 //ChangeShovelsPosition(ShovelsState.HookingRB);
                 ChangeShovelsPosition(ShovelsState.LoadingPulseShot);
-                EM_PlayerController.Instance.currentObjective = null;
+                //EM_PlayerController.Instance.currentObjective = null;
+                EM_PlayerController.Instance.currentObjective = EM_PlayerController.Instance.cameraController.GetNearestBossSectionToScreenCenter();
                 hookLineRenderer.gameObject.SetActive(false);
             }
         }
@@ -237,12 +251,17 @@ public class EM_ShovelController : MonoBehaviour
             chekcingNearingGrabDistanceTicks = 0;
             // TODO: Pillar la velocity del rigidbody agarrado y aplicarla al jugador
 
-            //
-            rb.AddForce(hookDirection.normalized * hookForce);
+            
             //
             if (hookedRb)
             {
                 hookedRb.AddForce(-hookDirection.normalized * hookForce);
+                rb.AddForce(hookDirection.normalized * hookForce + hookedRb.velocity);
+            }
+            else
+            {
+                //
+                rb.AddForce(hookDirection.normalized * hookForce);
             }
         }        
     }
@@ -437,7 +456,8 @@ public class EM_ShovelController : MonoBehaviour
         {
             GameObject newRapidFireBullet = Instantiate(rapidFirePrefab, hookedRbPoint.position, hookedRbPoint.rotation);
             Rigidbody bulletRB = newRapidFireBullet.GetComponent<Rigidbody>();
-            bulletRB.AddForce(transform.forward * 50, ForceMode.Impulse);
+            bulletRB.AddForce(transform.forward * rapidFireForce, ForceMode.Impulse);
+            AudioManager.Instance.Play3dFx(transform.position, rapidFireClip, 0.6f);
             Debug.Log("Shooting rapid fire proyectile");
             yield return new WaitForSeconds(0.1f);
         }

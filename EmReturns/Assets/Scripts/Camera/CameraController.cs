@@ -125,6 +125,39 @@ public class CameraController : MonoBehaviour
         return selectedObjective;
     }
 
+    public Transform GetNearestBossSectionToScreenCenter()
+    {
+        //
+        Transform selectedObjective = null;
+        //Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
+        float nearestToCenter = Mathf.Infinity;
+        //
+        Boss1SegmentController[] possibleObjectives = FindObjectsOfType<Boss1SegmentController>();
+        for (int i = 0; i < possibleObjectives.Length; i++)
+        {
+            //
+            if (possibleObjectives[i].damaged)
+                continue;
+            // Distancia al centro de pantalla
+            Vector3 posInScreen = properCamera.WorldToViewportPoint(possibleObjectives[i].transform.position);
+            float distanceToCenter = Mathf.Pow(posInScreen.x - 0.5f, 2) + Mathf.Pow(posInScreen.y - 0.5f, 2);
+            // TODO: Peso extra según la etuiqueta
+            //bool inScreen = posInScreen.x >= 0 && posInScreen.x <= 1 &&
+            //    posInScreen.y >= 0 && posInScreen.y <= 1 &&
+            //    posInScreen.z > 0;
+            bool inScreen = true;
+            //
+            if (inScreen && distanceToCenter < nearestToCenter)
+            {
+                nearestToCenter = distanceToCenter;
+                selectedObjective = possibleObjectives[i].transform;
+            }
+        }
+
+        //
+        return selectedObjective;
+    }
+
     public Transform ChangeObjective(Vector2 direction)
     {
         //
@@ -166,6 +199,49 @@ public class CameraController : MonoBehaviour
 
         //
         return selectedObjective;               
+    }
+
+    public Transform ChangeBossSegmentObjective(Vector2 direction)
+    {
+        //
+        Transform selectedObjective = null;
+        //Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
+        float nearestAngle = Mathf.Infinity; //180f;
+        //
+        float stickAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        //
+        Boss1SegmentController[] possibleObjectives = FindObjectsOfType<Boss1SegmentController>();
+        //
+        //LockableObjective currentObjective = playerController.currentObjective.GetComponent<LockableObjective>();
+        //
+        for (int i = 0; i < possibleObjectives.Length; i++)
+        {
+            //
+            if (possibleObjectives[i] == playerController.currentObjective
+                // || possibleObjectives[i] == EM_ShovelController.Instance.HookedObjective
+                || possibleObjectives[i].damaged
+                )
+                continue;
+            // De momento puro angulo
+            Vector3 posInScreen = properCamera.WorldToViewportPoint(possibleObjectives[i].transform.position);
+            Vector2 coordinatesFromScreenCenter = new Vector2(posInScreen.x - 0.5f, posInScreen.y - 0.5f);
+            float objectiveAngle = Mathf.Atan2(coordinatesFromScreenCenter.y, coordinatesFromScreenCenter.x) * Mathf.Rad2Deg;
+            float angleOffset = Mathf.Abs(stickAngle - objectiveAngle);     // Max 180
+            float distanceToCenter = Mathf.Pow(posInScreen.x - 0.5f, 2) + Mathf.Pow(posInScreen.y - 0.5f, 2);   // Max 1 con algo
+            float distanceToCenterScaled = distanceToCenter * 10;
+            bool inScreen = posInScreen.x >= 0 && posInScreen.x <= 1 &&
+                posInScreen.y >= 0 && posInScreen.y <= 1 &&
+                posInScreen.z > 0;
+            // TODO: Hacer un mix de distancia y angulo para valorar
+            if (inScreen && angleOffset + distanceToCenterScaled < nearestAngle)
+            {
+                nearestAngle = angleOffset + distanceToCenterScaled;
+                selectedObjective = possibleObjectives[i].transform;
+            }
+        }
+
+        //
+        return selectedObjective;
     }
 
     //

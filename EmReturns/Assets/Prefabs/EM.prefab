@@ -1655,6 +1655,7 @@ GameObject:
   - component: {fileID: 6244736362935794271}
   - component: {fileID: 6244736362935794266}
   - component: {fileID: 1543989312184818935}
+  - component: {fileID: 6244736362667297582}
   m_Layer: 6
   m_Name: EM
   m_TagString: Untagged
@@ -1748,21 +1749,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementForce: 50
-  ragdollDuration: 3
-  maxShields: 1000
+  ragdollDuration: 1.5
+  invulnerabilityDuration: 3
+  maxShields: 500
   maxHealth: 3
+  finisherDuration: 5
+  dashForce: 50
   objectiveMarker: {fileID: 0}
-  shieldBar: {fileID: 0}
-  finisherBar: {fileID: 0}
+  hazardMarker: {fileID: 0}
+  shieldBarBack: {fileID: 0}
+  shieldBarFront: {fileID: 0}
+  finisherBarBack: {fileID: 0}
+  finisherBarFront: {fileID: 0}
   recoverBar: {fileID: 0}
   recoverLetter: {fileID: 0}
-  healthIcons: []
+  healthIcons:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   finisherBarAnimator: {fileID: 0}
+  speedIndicator: {fileID: 0}
+  endGamePanel: {fileID: 0}
+  damageImage: {fileID: 0}
   damageClip: {fileID: 8300000, guid: a7019f4bb9615584da045b6d90b0c331, type: 3}
   restorationClip: {fileID: 8300000, guid: 582fc122dfd4aa340ada98e3e1f26457, type: 3}
   finisherEnergyClip: {fileID: 8300000, guid: 84e46dd27a3c46343b6a95c43f255228, type: 3}
   finisherLoadCompletedClip: {fileID: 8300000, guid: b1492a5d013d4d54989f3baad033781c, type: 3}
+  dashClip: {fileID: 8300000, guid: d6dcb5cc74a28a748b0c594cf8a640c5, type: 3}
   currentObjective: {fileID: 0}
+  nearestHazard: {fileID: 0}
 --- !u!114 &6244736362935794271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1794,6 +1809,7 @@ MonoBehaviour:
   hookForce: 100
   pulseForce: 500
   sprintForce: 25
+  rapidFireForce: 50
   shovels:
   - {fileID: 2711181985161563827}
   - {fileID: 3358546209581119774}
@@ -1809,10 +1825,14 @@ MonoBehaviour:
   energyPulseAttackPrefab: {fileID: 1918957472627809225, guid: c4fef9346ce8e7446b949da95b44721e, type: 3}
   powerTrail: {fileID: 3982400364742130751}
   finisherEnergyBall: {fileID: 3783590981235426300, guid: d2e6e368ed4885145926bdd4422c7893, type: 3}
+  rapidFirePrefab: {fileID: 7781553820730823322, guid: f435c8adcd4bf464ca0da410b221ec83, type: 3}
   loadBar: {fileID: 0}
   loadingClip: {fileID: 8300000, guid: 99b942fa78a6d064ca2da303ed13a3f8, type: 3}
   propulsionClip: {fileID: 8300000, guid: 37b656f4288861341ba7cdcc14777de5, type: 3}
   shootClip: {fileID: 8300000, guid: 83fa183ed88834a4d9f1377df4c925e5, type: 3}
+  grabClip: {fileID: 8300000, guid: d4a88977ae790ef468e42d91a5a63ed1, type: 3}
+  rapidFireClip: {fileID: 8300000, guid: 995ed3734aa8fbd4e9f2d17e4e0369c5, type: 3}
+  grabbingDistanceIndicator: {fileID: 0}
   currentShovelsState: 0
   hookedRb: {fileID: 0}
 --- !u!114 &1543989312184818935
@@ -1827,6 +1847,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 095babfd0b31d264eb599ac1a397d718, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6244736362667297582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6244736363206363753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 0, g: 0, b: 0, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &6244736363206363755
 GameObject:
   m_ObjectHideFlags: 0
