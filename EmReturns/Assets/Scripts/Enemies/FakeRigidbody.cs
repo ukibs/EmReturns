@@ -13,8 +13,11 @@ public class FakeRigidbody : MonoBehaviour
     public bool rotates = false;
 
     //
+    [HideInInspector] public Vector3 currentVelocity;
+
+    //
     private Rigidbody rb;
-    private Vector3 currentVelocity;
+    
     private float currentRotationForce;
     private bool forceReceivedThisFrame = false;
 

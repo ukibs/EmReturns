@@ -33,6 +33,14 @@ public class Boss1SegmentController : MonoBehaviour
     //
     [HideInInspector] public float currentSpeed;
 
+    public Vector3 Velocity
+    {
+        get { 
+            Vector3 velocity = transform.forward * currentSpeed;
+            return velocity; 
+        }
+    }
+
     //
     private Rigidbody rb;
     private Vector3 idealDistanceToObjective;
@@ -136,6 +144,9 @@ public class Boss1SegmentController : MonoBehaviour
                 AudioManager.Instance.Play3dFx(transform.position, onDamageClip, 0.3f);
                 boss1Controller.OnDamagedSegment();
                 damaged = true;
+                // Change player objective if this was the locked one
+                if(EM_PlayerController.Instance.currentObjective == this.transform)
+                    EM_PlayerController.Instance.currentObjective = CameraController.Instance.ChangeBossSegmentObjective(Vector2.right);
                 //
                 for (int i = 0; i < 10; i++)
                 {

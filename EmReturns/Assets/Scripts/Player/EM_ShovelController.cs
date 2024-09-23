@@ -40,6 +40,7 @@ public class EM_ShovelController : MonoBehaviour
     public Image loadBar;
     [Header("Feedback")]
     public AudioClip loadingClip;
+    public AudioClip loadingReadyClip;
     public AudioClip propulsionClip;
     public AudioClip shootClip;
     public AudioClip grabClip;
@@ -50,6 +51,7 @@ public class EM_ShovelController : MonoBehaviour
     //
     [HideInInspector] public ShovelsState currentShovelsState = ShovelsState.Idle;
     [HideInInspector] public Rigidbody hookedRb = null;
+    [HideInInspector] public FakeRigidbody hookedFakeRb = null;
 
     //
     private static EM_ShovelController instance;
@@ -146,10 +148,15 @@ public class EM_ShovelController : MonoBehaviour
                     //Debug.Log("Rotating " + currentShovelPosturePositions.name);
                     UpdateShovelsPositions();
                     //
-                    loadAmount += dt;
-                    loadAmount = Mathf.Min(loadAmount, 1);
-                    loadBar.fillAmount = loadAmount;
-                    // TODO: Igual hay que ahcer aqui algo con el finisher
+                    if(loadAmount < 1)
+                    {
+                        loadAmount += dt;
+                        loadAmount = Mathf.Min(loadAmount, 1);
+                        loadBar.fillAmount = loadAmount;
+
+                        if(loadAmount == 1)
+                            AudioManager.Instance.PlayLoadFx(loadingReadyClip, false, 1);
+                    }
                     break;
             }
         }        
@@ -195,6 +202,12 @@ public class EM_ShovelController : MonoBehaviour
             if (hitRigidbody)
             {
                 hookedRb = hitRigidbody;
+            }
+            //
+            FakeRigidbody hitFakeRigidbody = hitInfo.transform.GetComponent<FakeRigidbody>();
+            if (hitFakeRigidbody)
+            {
+                hookedFakeRb = hitFakeRigidbody;
             }
             //
             ChangeShovelsPosition(ShovelsState.Hooked);
@@ -257,6 +270,11 @@ public class EM_ShovelController : MonoBehaviour
             {
                 hookedRb.AddForce(-hookDirection.normalized * hookForce);
                 rb.AddForce(hookDirection.normalized * hookForce + hookedRb.velocity);
+            }
+            else if (hookedFakeRb)
+            {
+                Boss1SegmentController boss1SegmentController = hookedFakeRb.gameObject.GetComponent<Boss1SegmentController>();
+                rb.AddForce(hookDirection.normalized * hookForce + hookedFakeRb.currentVelocity + boss1SegmentController.Velocity);
             }
             else
             {
@@ -321,6 +339,7 @@ public class EM_ShovelController : MonoBehaviour
         CheckAndDestroyFinisherController();
         //
         hookedRb = null;
+        hookedFakeRb = null;
         //
         AudioManager.Instance.StopLoadFx();
     }
@@ -374,7 +393,7 @@ public class EM_ShovelController : MonoBehaviour
                     AudioManager.Instance.PlayLoadFx(propulsionClip, true, 1);
                     break;
                 case ShovelsState.RapidFire:
-                    Debug.Log("Starting rapid fire");
+                    //Debug.Log("Starting rapid fire");
                     currentShovelPosturePositions = shovelPosturesPositions[1];
                     StartCoroutine(RapidFireCoroutine());
                     break;
@@ -450,7 +469,7 @@ public class EM_ShovelController : MonoBehaviour
 
     IEnumerator RapidFireCoroutine()
     {
-        Debug.Log("Starting rapid fire coroutine: " + currentShovelsState.ToString());
+        //Debug.Log("Starting rapid fire coroutine: " + currentShovelsState.ToString());
         yield return new WaitForSeconds(0.1f);
         while (currentShovelsState == ShovelsState.RapidFire)
         {
@@ -458,7 +477,7 @@ public class EM_ShovelController : MonoBehaviour
             Rigidbody bulletRB = newRapidFireBullet.GetComponent<Rigidbody>();
             bulletRB.AddForce(transform.forward * rapidFireForce, ForceMode.Impulse);
             AudioManager.Instance.Play3dFx(transform.position, rapidFireClip, 0.6f);
-            Debug.Log("Shooting rapid fire proyectile");
+            //Debug.Log("Shooting rapid fire proyectile");
             yield return new WaitForSeconds(0.1f);
         }
     }

@@ -21,7 +21,7 @@ public class DestructibleObject : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public void OnCollisionEnter(Collision collision)
     {
         //Debug.Log(collision.collider);
         //Rigidbody rb = collision.collider.GetComponent<Rigidbody>();

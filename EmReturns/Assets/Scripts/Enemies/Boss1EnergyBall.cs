@@ -88,10 +88,11 @@ public class Boss1EnergyBall : MonoBehaviour
         currentTimeToExplode = lifeTime;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Collided with: " + collision.gameObject.name);
-        Explode();
+        //Debug.Log("Collided with: " + collision.gameObject.name);
+        if(!exploding)
+            Explode();
     }
 
     private void OnTriggerStay(Collider other)

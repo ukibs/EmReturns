@@ -9,20 +9,26 @@ public class CameraController : MonoBehaviour
     public Transform xPivot;
     public Transform cameraFrame;
     public Vector2 rotationSpeed = new Vector2(360, 90);
+    public Vector3 nearPosition = new Vector3(0, 6, -20);
+    public Vector3 farPosition = new Vector3(0, 10, -40);
     //
     [HideInInspector] public Transform objectiveInCenter;
     [HideInInspector] public Vector3 objectiveInCenterPoint;
     //
+    private static CameraController instance;
     private EM_PlayerController playerController;
     private Camera properCamera;
+    private float lerpT;
     //
     //private int cameraDirection = -1;
 
+    public static CameraController Instance { get { return instance; } }
     public Quaternion ProperCameraRotation { get { return properCamera.transform.rotation; } }
 
     // Start is called before the first frame update
     void Start()
     {
+        instance = this;
         playerController = FindObjectOfType<EM_PlayerController>();
         properCamera = GetComponentInChildren<Camera>();
     }
@@ -56,6 +62,19 @@ public class CameraController : MonoBehaviour
 
         //
         UpdateCentralPoint();
+
+        //
+        if(playerController.currentObjective && lerpT < 1)
+        {
+            lerpT += dt * 2;
+            lerpT = Mathf.Min(lerpT, 1);
+            xPivot.localPosition = Vector3.Lerp(nearPosition, farPosition, lerpT);
+        }
+        else if(!playerController.currentObjective && lerpT > 0){
+            lerpT -= dt * 2;
+            lerpT = Mathf.Max(lerpT, 0);
+            xPivot.localPosition = Vector3.Lerp(nearPosition, farPosition, lerpT);
+        }
 
         //
         //if (gamepad.leftStickButton.wasPressedThisFrame)
@@ -117,6 +136,37 @@ public class CameraController : MonoBehaviour
             if (inScreen && distanceToCenter < nearestToCenter)
             {
                 nearestToCenter = distanceToCenter;
+                selectedObjective = possibleObjectives[i].transform;
+            }
+        }
+
+        //
+        return selectedObjective;
+    }
+
+    public Transform GetNearestObjectiveToPlayer<T>(bool hasHookedRb) where T : LockableObjective
+    {
+        //
+        Transform selectedObjective = null;
+        //Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
+        float nearestToPlayer = Mathf.Infinity;
+        //
+        T[] possibleObjectives = FindObjectsOfType<T>();
+        for (int i = 0; i < possibleObjectives.Length; i++)
+        {
+            ////
+            //if (hasHookedRb && possibleObjectives[i].type == LockableObjective.Type.Scenario)
+            //    continue;
+            ////
+            //if (possibleObjectives[i] == EM_ShovelController.Instance.HookedObjective)
+            //    continue;
+            // Distancia al jugador
+            float distanceToPlayer = Vector3.SqrMagnitude(possibleObjectives[i].transform.position - transform.position);
+            
+            //
+            if (distanceToPlayer < nearestToPlayer)
+            {
+                nearestToPlayer = distanceToPlayer;
                 selectedObjective = possibleObjectives[i].transform;
             }
         }
@@ -203,6 +253,7 @@ public class CameraController : MonoBehaviour
 
     public Transform ChangeBossSegmentObjective(Vector2 direction)
     {
+        Debug.Log("Changing boss segment objective");
         //
         Transform selectedObjective = null;
         //Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);

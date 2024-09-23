@@ -44,6 +44,9 @@ public class Boss1Controller : MonoBehaviour
     public MeshRenderer[] shaderMeshRenderers;
     public Material healthyMaterial;
     public Material damagedMaterial;
+    public MeshRenderer faceMeshRenderer;
+    public Material angryFaceMaterial;
+    public Material lazerFaceMaterial;
     [Header("FX")]
     public AudioClip loadingLazerClip;
     public AudioClip shootingLazerClip;
@@ -273,14 +276,21 @@ public class Boss1Controller : MonoBehaviour
                 currentEnergyShieldPreparation += dt;
                 forceField.UpdateSize(currentEnergyShieldPreparation / energyBallPreparation);
                 for (int i = 0; i < segmentControllers.Length; i++)
-                    segmentControllers[i].forceField.UpdateSize(currentEnergyShieldPreparation / energyBallPreparation);
+                {
+                    if (!segmentControllers[i].damaged)
+                        segmentControllers[i].forceField.UpdateSize(currentEnergyShieldPreparation / energyBallPreparation);
+                }                    
                 // TODO: Ampliamos escudo
                 if (currentEnergyShieldPreparation >= energyShieldPreparation)
                 {
                     // Audio de escudo activado
                     forceField.Activate(damagedMaterial);
                     for (int i = 0; i < segmentControllers.Length; i++)
-                        segmentControllers[i].forceField.Activate(damagedMaterial);
+                    {
+                        if(!segmentControllers[i].damaged)
+                            segmentControllers[i].forceField.Activate(damagedMaterial);
+                    }
+                        
                 }
             }
             else
@@ -291,7 +301,10 @@ public class Boss1Controller : MonoBehaviour
                     shieldActivationRequested = false;
                     forceField.Deactivate();
                     for (int i = 0; i < segmentControllers.Length; i++)
-                        segmentControllers[i].forceField.Deactivate();
+                    {
+                        if (!segmentControllers[i].damaged || segmentControllers[i].gameObject.activeSelf)
+                            segmentControllers[i].forceField.Deactivate();
+                    }                        
                 }
             }
         }
@@ -303,6 +316,7 @@ public class Boss1Controller : MonoBehaviour
         if (!aggresive)
         {
             aggresive = true;
+            faceMeshRenderer.material = angryFaceMaterial;
             AudioManager.Instance.PlayMusic(combatMusic[0], 0.3f, true);
             GoToNextBehaviour();
         }
@@ -320,7 +334,11 @@ public class Boss1Controller : MonoBehaviour
             // Audio de escudo arrancando
             forceField.StartCycle(healthyMaterial);
             for (int i = 0; i < segmentControllers.Length; i++)
-                segmentControllers[i].forceField.StartCycle(healthyMaterial);
+            {
+                if(!segmentControllers[i].damaged)
+                    segmentControllers[i].forceField.StartCycle(healthyMaterial);
+            }
+                
         }
     }
 
@@ -334,6 +352,7 @@ public class Boss1Controller : MonoBehaviour
             case LazerState.CoolDown:
                 currentLazerState = LazerState.Loading;
                 smallLazer.SetActive(true);
+                faceMeshRenderer.material = lazerFaceMaterial;
                 AudioManager.Instance.Play2dFx(smallLazer.transform.position, loadingLazerClip, 0.5f);
                 break;
             case LazerState.Loading:
@@ -345,6 +364,7 @@ public class Boss1Controller : MonoBehaviour
             case LazerState.Shooting:
                 currentLazerState = LazerState.CoolDown;
                 bigLazer.SetActive(false);
+                faceMeshRenderer.material = angryFaceMaterial;
                 break;
         }
     }
@@ -431,6 +451,8 @@ public class Boss1Controller : MonoBehaviour
         {
             segmentControllers[i].Die();
         }
+        //
+        faceMeshRenderer.gameObject.SetActive(false);
         //
         rb.isKinematic = false;
         rb.velocity = transform.forward * bossPhases[currentPhase].behaviours[currentBehaviourIndex].movementSpeed;

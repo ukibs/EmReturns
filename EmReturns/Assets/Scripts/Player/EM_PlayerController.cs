@@ -17,6 +17,8 @@ public class EM_PlayerController : MonoBehaviour
     public float maxHealth = 3;
     public float finisherDuration = 10;
     public float dashForce = 25;
+    [Header("Components")]
+    public GameObject hazardSignalier;
     [Header("HUD")]
     public RectTransform objectiveMarker;
     public RectTransform hazardMarker;
@@ -41,6 +43,7 @@ public class EM_PlayerController : MonoBehaviour
 
     //
     [HideInInspector] public Transform currentObjective = null;
+    [HideInInspector] public Transform nearestHazardOnScreen = null;
     [HideInInspector] public Transform nearestHazard = null;
     [HideInInspector] public Transform nearestUsable = null;
 
@@ -191,7 +194,7 @@ public class EM_PlayerController : MonoBehaviour
         //
         CheckHazards();
         //
-        if (shovelController.hookedRb == null)
+        if (shovelController.hookedRb == null && currentObjective == null)
         {
             CheckUsables();
         }
@@ -402,10 +405,11 @@ public class EM_PlayerController : MonoBehaviour
 
     void CheckHazards()
     {
-        nearestHazard = cameraController.GetNearestObjectiveToScreenCenter<Hazard>(shovelController.hookedRb);
-        if(nearestHazard != null)
+        // On screen
+        nearestHazardOnScreen = cameraController.GetNearestObjectiveToScreenCenter<Hazard>(shovelController.hookedRb);
+        if(nearestHazardOnScreen != null)
         {
-            Vector3 nearestHazardScreenPosition = Camera.main.WorldToScreenPoint(nearestHazard.position);
+            Vector3 nearestHazardScreenPosition = Camera.main.WorldToScreenPoint(nearestHazardOnScreen.position);
             //hazardMarker.anchoredPosition = new Vector2((nearestHazardScreenPosition.x - 0.5f) * (Screen.width / 2), (nearestHazardScreenPosition.y - 0.5f) * (Screen.height / 2));
             hazardMarker.anchoredPosition = nearestHazardScreenPosition;
             hazardMarker.gameObject.SetActive(true);
@@ -413,6 +417,18 @@ public class EM_PlayerController : MonoBehaviour
         else
         {
             hazardMarker.gameObject.SetActive(false);
+        }
+
+        // In total
+        nearestHazard = cameraController.GetNearestObjectiveToPlayer<Hazard>(shovelController.hookedRb);
+        if(nearestHazard != null)
+        {
+            hazardSignalier.gameObject.SetActive(true);
+            hazardSignalier.transform.LookAt(nearestHazard.transform.position);
+        }
+        else
+        {
+            hazardSignalier.gameObject.SetActive(false);
         }
     }
 
@@ -434,14 +450,14 @@ public class EM_PlayerController : MonoBehaviour
 
     void CheckAndLook(Vector3 movementDirection)
     {
-        if (nearestHazard && shovelController.currentShovelsState == EM_ShovelController.ShovelsState.RapidFire)
+        if (nearestHazardOnScreen && shovelController.currentShovelsState == EM_ShovelController.ShovelsState.RapidFire)
         {
             Rigidbody rapidFireRb = shovelController.rapidFirePrefab.GetComponent<Rigidbody>();
-            Rigidbody hazardRb = nearestHazard.gameObject.GetComponent<Rigidbody>();
+            Rigidbody hazardRb = nearestHazardOnScreen.gameObject.GetComponent<Rigidbody>();
             float timeToReach = GeneralFunctions.EstimateTimeBetweenTwoPoints(
-                transform.position, nearestHazard.position, shovelController.rapidFireForce / rapidFireRb.mass);
-            Debug.Log("Time to reach: " + timeToReach);
-            Vector3 hazardFuturePosition = GeneralFunctions.EstimateFuturePosition(nearestHazard.position, hazardRb.velocity, timeToReach);
+                transform.position, nearestHazardOnScreen.position, shovelController.rapidFireForce / rapidFireRb.mass);
+            //Debug.Log("Time to reach: " + timeToReach);
+            Vector3 hazardFuturePosition = GeneralFunctions.EstimateFuturePosition(nearestHazardOnScreen.position, hazardRb.velocity, timeToReach);
             transform.LookAt(hazardFuturePosition);
         }
         else if (currentObjective && 
@@ -449,7 +465,27 @@ public class EM_PlayerController : MonoBehaviour
             shovelController.currentShovelsState == EM_ShovelController.ShovelsState.RapidFire)
             ) 
         {
-            transform.LookAt(currentObjective);
+            if(shovelController.currentShovelsState == EM_ShovelController.ShovelsState.RapidFire)
+            {
+                Rigidbody rapidFireRb = shovelController.rapidFirePrefab.GetComponent<Rigidbody>();
+                FakeRigidbody fakeRigidbody = currentObjective.gameObject.GetComponent<FakeRigidbody>();
+                Boss1SegmentController boss1SegmentController = currentObjective.gameObject.GetComponent <Boss1SegmentController>();
+                float timeToReach = GeneralFunctions.EstimateTimeBetweenTwoPoints(
+                    transform.position, fakeRigidbody.transform.position, shovelController.rapidFireForce / rapidFireRb.mass);
+                //Debug.Log("Time to reach: " + timeToReach);
+                Vector3 bossVelocity = boss1SegmentController.Velocity;
+                Vector3 hazardFuturePosition = GeneralFunctions.EstimateFuturePosition(
+                    fakeRigidbody.transform.position, 
+                    fakeRigidbody.currentVelocity + bossVelocity, 
+                    timeToReach
+                    
+                    );
+                transform.LookAt(hazardFuturePosition);
+            }
+            else
+            {
+                transform.LookAt(currentObjective);
+            }            
         }
         else if (
             shovelController.currentShovelsState == EM_ShovelController.ShovelsState.LoadingPulseShot || 

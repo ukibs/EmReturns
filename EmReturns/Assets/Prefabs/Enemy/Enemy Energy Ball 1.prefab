@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 19dc38c0d1b5d63489ef7f7297b090f0, type: 2}
+  - {fileID: 2100000, guid: 9740360812ee88d479479f184765177a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -131,6 +131,8 @@ MonoBehaviour:
   maxSizeBeforeDisapearing: 100
   explosionForce: 50
   forceTowardsPlayer: 100
+  checkDistance: 0
+  timeToExplode: 15
 --- !u!96 &5415010982452860543
 TrailRenderer:
   serializedVersion: 2
@@ -151,7 +153,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 19dc38c0d1b5d63489ef7f7297b090f0, type: 2}
+  - {fileID: 2100000, guid: 9740360812ee88d479479f184765177a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

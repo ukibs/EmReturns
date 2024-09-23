@@ -18,7 +18,7 @@ public class HealthMarkerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         Vector3 nearestUsableScreenPosition = Camera.main.WorldToScreenPoint(healthController.transform.position);
         //rectTransform.anchoredPosition = new Vector2((nearestUsableScreenPosition.x - 0.5f) * (Screen.width / 2), (nearestUsableScreenPosition.y - 0.5f) * (Screen.height / 2));

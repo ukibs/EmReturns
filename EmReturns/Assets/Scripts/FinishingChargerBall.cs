@@ -8,16 +8,20 @@ public class FinishingChargerBall : MonoBehaviour
     public float movementSpeed = 100f;
     public float rotationSpeed = 30f;
 
+    //
+    //private Rigidbody rb;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        //rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
         float dt = Time.deltaTime;
+        CheckRaycastCollissions();
         UpdateMovement(dt);
     }
 
@@ -32,6 +36,22 @@ public class FinishingChargerBall : MonoBehaviour
         }
     }
 
+    private void CheckRaycastCollissions()
+    {
+        RaycastHit hitInfo;
+        float dt = Time.deltaTime;
+        float bulletTravelDistance = movementSpeed * dt;
+        if (Physics.Raycast(transform.position, transform.forward, out hitInfo, bulletTravelDistance))
+        {
+            Collider collider = hitInfo.collider;
+            if (collider.gameObject.layer == 6)
+            {
+                Destroy(gameObject);
+                EM_PlayerController.Instance.GetFinisherEnergy();
+            }
+        }
+    }
+
     void UpdateMovement(float dt)
     {        
         Vector3 playerDirection = EM_PlayerController.Instance.transform.position - transform.position;
@@ -41,7 +61,7 @@ public class FinishingChargerBall : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(newDirection);
         transform.Translate(Vector3.forward * dt * movementSpeed);
         // Extra para que no se peguen media vida persiguiendo al player
-        movementSpeed += dt;
-        rotationSpeed += dt;
+        movementSpeed += dt * 10;
+        rotationSpeed += dt * 5;
     }
 }
