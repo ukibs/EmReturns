@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfc4f886a1c9f9d47a7dbc488cfe3aa5, type: 3}
+  m_Name: DesertColumns
+  m_EditorClassIdentifier: 
+  objectGroups:
+  - prefabs:
+    - {fileID: 9040823803390188681, guid: 442b86e2791efba409aca78c5eba0745, type: 3}
+    objectDensity: 1
+    xObjects: 100
+    yObjects: 1
+    zObjects: 100
+    xDistance: 50
+    yDistance: 0
+    zDistance: 50

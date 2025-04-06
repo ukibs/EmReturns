@@ -118,6 +118,45 @@ public class InputController : MonoBehaviour
         }
     }
 
+    // Charge Forward
+    public bool ChargeForwardPressed
+    {
+        get
+        {
+            if (gamepad != null)
+            {
+                return gamepad.leftShoulder.wasPressedThisFrame;
+            }
+            else if (mouse != null)
+            {
+                return keyboard.qKey.wasPressedThisFrame;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    public bool ChargeForwardReleased
+    {
+        get
+        {
+            if (gamepad != null)
+            {
+                return gamepad.leftShoulder.wasReleasedThisFrame;
+            }
+            else if (mouse != null)
+            {
+                return keyboard.qKey.wasReleasedThisFrame;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
     // Rapid fire
     public bool RapidFirePressed
     {
@@ -129,7 +168,7 @@ public class InputController : MonoBehaviour
             }
             else if (mouse != null)
             {
-                return mouse.middleButton.wasPressedThisFrame;
+                return keyboard.eKey.wasPressedThisFrame;
             }
             else
             {
@@ -148,7 +187,7 @@ public class InputController : MonoBehaviour
             }
             else if (mouse != null)
             {
-                return mouse.middleButton.wasReleasedThisFrame;
+                return keyboard.eKey.wasReleasedThisFrame;
             }
             else
             {
@@ -227,6 +266,45 @@ public class InputController : MonoBehaviour
             else if (keyboard != null)
             {
                 return keyboard.spaceKey.wasReleasedThisFrame;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    // Down
+    public bool DownPressed
+    {
+        get
+        {
+            if (gamepad != null)
+            {
+                return gamepad.yButton.wasPressedThisFrame;
+            }
+            else if (keyboard != null)
+            {
+                return keyboard.leftCtrlKey.wasPressedThisFrame;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    public bool DownReleased
+    {
+        get
+        {
+            if (gamepad != null)
+            {
+                return gamepad.yButton.wasReleasedThisFrame;
+            }
+            else if (keyboard != null)
+            {
+                return keyboard.leftCtrlKey.wasReleasedThisFrame;
             }
             else
             {

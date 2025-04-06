@@ -15,6 +15,8 @@ public class EM_ShovelController : MonoBehaviour
         Sprint,
         VerticalImpulse,
         RapidFire,
+        DownImpulse,
+        LoadingChargeForward,
 
         Count
     }
@@ -52,6 +54,7 @@ public class EM_ShovelController : MonoBehaviour
     [HideInInspector] public ShovelsState currentShovelsState = ShovelsState.Idle;
     [HideInInspector] public Rigidbody hookedRb = null;
     [HideInInspector] public FakeRigidbody hookedFakeRb = null;
+    [HideInInspector] public float loadAmount = 0;
 
     //
     private static EM_ShovelController instance;
@@ -59,7 +62,6 @@ public class EM_ShovelController : MonoBehaviour
     private Quaternion[] shovelsOriginalRotations;
     private Rigidbody rb;    
     private Transform currentShovelPosturePositions;
-    private float loadAmount = 0;
     private Vector3 hookedRbPointOriginalPosition;
 
     //^Para chequeo de agarre
@@ -121,6 +123,9 @@ public class EM_ShovelController : MonoBehaviour
                 case ShovelsState.RapidFire:
                     // TODO: Update rapid fire
                     break;
+                case ShovelsState.DownImpulse:
+                    ApplyVerticalForceDown();
+                    break;
             }
         }               
     }
@@ -141,6 +146,7 @@ public class EM_ShovelController : MonoBehaviour
                     UpdateShovelsPositions();
                     break;
                 case ShovelsState.LoadingPulseShot:
+                case ShovelsState.LoadingChargeForward:
                     //
                     //currentShovelPosturePositions.Rotate(Vector3.forward * 360f);
                     //currentShovelPosturePositions.localEulerAngles = Vector3.forward * (Time.time * 360);
@@ -297,6 +303,12 @@ public class EM_ShovelController : MonoBehaviour
     }
 
     //
+    void ApplyVerticalForceDown()
+    {
+        rb.AddForce(-transform.up * sprintForce);
+    }
+
+    //
     void CarryRb()
     {
         // Por si se pierde el rb por alguna razón
@@ -394,8 +406,18 @@ public class EM_ShovelController : MonoBehaviour
                     break;
                 case ShovelsState.RapidFire:
                     //Debug.Log("Starting rapid fire");
-                    currentShovelPosturePositions = shovelPosturesPositions[1];
+                    currentShovelPosturePositions = shovelPosturesPositions[4];
                     StartCoroutine(RapidFireCoroutine());
+                    break;
+                case ShovelsState.DownImpulse:
+                    currentShovelPosturePositions = shovelPosturesPositions[5];
+                    powerTrail.transform.localPosition = currentShovelPosturePositions.localPosition;
+                    powerTrail.SetActive(true);
+                    AudioManager.Instance.PlayLoadFx(propulsionClip, true, 1);
+                    break;
+                case ShovelsState.LoadingChargeForward:
+                    currentShovelPosturePositions = shovelPosturesPositions[6];
+                    AudioManager.Instance.PlayLoadFx(loadingClip, false, 1);
                     break;
             }
             //
@@ -451,6 +473,23 @@ public class EM_ShovelController : MonoBehaviour
             AudioManager.Instance.Play3dFx(transform.position, shootClip, 0.6f);
         }
         ReturnShovelsToIdle();
+    }
+
+    public void ReleaseChargeForward()
+    {
+        ReturnShovelsToIdle();
+        EM_PlayerController.Instance.GetRagdolled();
+        EM_PlayerController.Instance.offensiveShield.SetActive(true);
+        //
+        //CameraEffects.Instance.ShakeEffect(0.15f, 2, 10);
+        //CameraEffects.Instance.FovEffect(0.15f, 50);
+        //
+        rb.AddForce(transform.forward * loadAmount * pulseForce, ForceMode.Impulse);
+        //
+        AudioManager.Instance.Play3dFx(transform.position, shootClip, 0.6f);
+        //
+        loadAmount = 0;
+        loadBar.fillAmount = 0;
     }
 
     public void CheckAndDestroyFinisherController()

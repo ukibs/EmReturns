@@ -19,6 +19,7 @@ public class EM_PlayerController : MonoBehaviour
     public float dashForce = 25;
     [Header("Components")]
     public GameObject hazardSignalier;
+    public GameObject offensiveShield;
     [Header("HUD")]
     public RectTransform objectiveMarker;
     public RectTransform hazardMarker;
@@ -128,6 +129,7 @@ public class EM_PlayerController : MonoBehaviour
                 case EM_ShovelController.ShovelsState.Sprint:
                 case EM_ShovelController.ShovelsState.VerticalImpulse:
                 case EM_ShovelController.ShovelsState.RapidFire:
+                case EM_ShovelController.ShovelsState.LoadingChargeForward:
                     //UpdateMovement(gamepad);
                     UpdateMovement();
                     break;
@@ -219,6 +221,19 @@ public class EM_PlayerController : MonoBehaviour
         speedIndicator.text = (int)(rb.velocity.magnitude * 3.6f) + " km/h";
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("EM Player controller collission: " + collision.gameObject.name);
+        if (offensiveShield.activeSelf)
+        {
+            Boss1SegmentController segmentController = collision.collider.GetComponentInParent<Boss1SegmentController>();
+            if (segmentController != null)
+            {
+                segmentController.SufferDamage((int)rb.velocity.magnitude);
+            }
+        }
+    }
+
     //
     void UpdateShieldAndFinisherFillers(float dt)
     {
@@ -266,6 +281,16 @@ public class EM_PlayerController : MonoBehaviour
                 {
                     shovelController.ChangeShovelsPosition(EM_ShovelController.ShovelsState.VerticalImpulse);
                 }
+                //
+                if (InputController.Instance.DownPressed)
+                {
+                    shovelController.ChangeShovelsPosition(EM_ShovelController.ShovelsState.DownImpulse);
+                }
+                //
+                if (InputController.Instance.ChargeForwardPressed)
+                {
+                    shovelController.ChangeShovelsPosition(EM_ShovelController.ShovelsState.LoadingChargeForward);
+                }
                 break;
             case EM_ShovelController.ShovelsState.Hooked:
                 //
@@ -308,11 +333,25 @@ public class EM_PlayerController : MonoBehaviour
                     shovelController.ReturnShovelsToIdle();
                 }
                 break;
+            case EM_ShovelController.ShovelsState.DownImpulse:
+                //
+                if (InputController.Instance.DownReleased)
+                {
+                    shovelController.ReturnShovelsToIdle();
+                }
+                break;
             case EM_ShovelController.ShovelsState.RapidFire:
                 //
                 if (InputController.Instance.RapidFireReleased)
                 {
                     shovelController.ReturnShovelsToIdle();
+                }
+                break;
+            case EM_ShovelController.ShovelsState.LoadingChargeForward:
+                if (InputController.Instance.ChargeForwardReleased)
+                {
+                    //shovelController.ReturnShovelsToIdle();
+                    shovelController.ReleaseChargeForward();
                 }
                 break;
         }
@@ -461,7 +500,9 @@ public class EM_PlayerController : MonoBehaviour
             transform.LookAt(hazardFuturePosition);
         }
         else if (currentObjective && 
-            (shovelController.currentShovelsState == EM_ShovelController.ShovelsState.LoadingPulseShot ||
+            (
+            shovelController.currentShovelsState == EM_ShovelController.ShovelsState.LoadingPulseShot ||
+            shovelController.currentShovelsState == EM_ShovelController.ShovelsState.LoadingChargeForward ||
             shovelController.currentShovelsState == EM_ShovelController.ShovelsState.RapidFire)
             ) 
         {
@@ -488,7 +529,8 @@ public class EM_PlayerController : MonoBehaviour
             }            
         }
         else if (
-            shovelController.currentShovelsState == EM_ShovelController.ShovelsState.LoadingPulseShot || 
+            shovelController.currentShovelsState == EM_ShovelController.ShovelsState.LoadingPulseShot ||
+            shovelController.currentShovelsState == EM_ShovelController.ShovelsState.LoadingChargeForward ||
             shovelController.currentShovelsState == EM_ShovelController.ShovelsState.RapidFire
         )
         {
@@ -515,6 +557,18 @@ public class EM_PlayerController : MonoBehaviour
         objectiveChangeAllowed = true;
     }
 
+    public void GetRagdolled()
+    {
+        ragdolled = true;
+        currentRagdollDuration = 0;
+        currentInvulnerabilityDuration = 0;
+        recoverLetter.SetActive(true);
+        rb.freezeRotation = false;
+
+        EM_ShovelController.Instance.loadAmount = 0;
+        EM_ShovelController.Instance.loadBar.fillAmount = 0;
+    }
+
     public void ApplyDamage(int damage)
     {
         //
@@ -526,13 +580,9 @@ public class EM_PlayerController : MonoBehaviour
         //
         if (!ragdolled)
         {
+            GetRagdolled();
             shovelController.ReturnShovelsToIdle();
-            ragdolled = true;
-            rb.freezeRotation = false;
             AudioManager.Instance.Play3dFx(transform.position, damageClip, 0.5f);
-            recoverLetter.SetActive(true);
-            currentRagdollDuration = 0;
-            currentInvulnerabilityDuration = 0;
             //
             //CameraEffects.Instance.ShakeEffect(0.15f, 2, 10);
             CameraEffects.Instance.FovEffect(0.15f, 50);
@@ -582,7 +632,10 @@ public class EM_PlayerController : MonoBehaviour
     {
         currentRagdollDuration += dt;
         recoverBar.fillAmount = currentRagdollDuration / ragdollDuration;
-        damageImage.color = new Color(255, 0, 0, 0.5f - (currentRagdollDuration / ragdollDuration * 0.5f));
+        if (!offensiveShield.activeSelf)
+        {
+            damageImage.color = new Color(255, 0, 0, 0.5f - (currentRagdollDuration / ragdollDuration * 0.5f));
+        }
         if(currentRagdollDuration >= ragdollDuration)
         {            
             RestoreControls();
@@ -591,6 +644,8 @@ public class EM_PlayerController : MonoBehaviour
 
     void RestoreControls()
     {
+        if(offensiveShield.activeSelf)
+            offensiveShield.SetActive(false);
         recoverBar.fillAmount = 0;
         ragdolled = false;
         rb.freezeRotation = true;
