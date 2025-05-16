@@ -60,6 +60,7 @@ public class Boss1SegmentController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         currentEnergyBalls = new Boss1EnergyBall[4];
         currentHealth = maxHealth;
+        healthMarkersPanel = GameObject.Find("Health Markers Panel").GetComponent<RectTransform>();
         healthMarkerController = Instantiate(healthMarkerPrefab, healthMarkersPanel).GetComponent<HealthMarkerController>();
         healthMarkerController.SetHealthController(this);
         //healthMarkerController.gameObject.SetActive(false);
@@ -137,10 +138,10 @@ public class Boss1SegmentController : MonoBehaviour
             if(currentHealth <= 0)
             {
                 //
-                for (int i = 0; i < shaderMeshRenderers.Length; i++)
-                {
-                    shaderMeshRenderers[i].material = boss1Controller.damagedMaterial;
-                }
+                //for (int i = 0; i < shaderMeshRenderers.Length; i++)
+                //{
+                //    shaderMeshRenderers[i].material = boss1Controller.damagedMaterial;
+                //}
                 AudioManager.Instance.Play3dFx(transform.position, onDamageClip, 0.3f);
                 boss1Controller.OnDamagedSegment();
                 damaged = true;
@@ -170,8 +171,21 @@ public class Boss1SegmentController : MonoBehaviour
                 //    healthMarkerController = Instantiate(healthMarkerPrefab, canvas.transform).GetComponent<HealthMarkerController>();
                 //    healthMarkerController.SetHealthController(this);                    
                 //}
-                healthMarkerController.gameObject.SetActive(true);
-                healthMarkerController.UpdateValue(currentHealth, maxHealth);
+                //healthMarkerController.gameObject.SetActive(true);
+                //healthMarkerController.UpdateValue(currentHealth, maxHealth);
+
+                //
+                for (int i = 0; i < shaderMeshRenderers.Length; i++)
+                {
+                    MaterialPropertyBlock mpb = new MaterialPropertyBlock();
+                    shaderMeshRenderers[i].GetPropertyBlock(mpb);
+                    mpb.SetFloat("_Transition", 1 - ((float)currentHealth / (float)maxHealth));
+                    shaderMeshRenderers[i].SetPropertyBlock(mpb);
+
+
+                    //shaderMeshRenderers[i].material.SetFloat("_Transition", 1 - ((float)currentHealth / (float)maxHealth));
+                    //Debug.Log("Transition value: " + shaderMeshRenderers[i].material.GetFloat("_Transition"));
+                }
             }
 
         }        
@@ -181,7 +195,11 @@ public class Boss1SegmentController : MonoBehaviour
     {
         for (int i = 0; i < shaderMeshRenderers.Length; i++)
         {
-            shaderMeshRenderers[i].material = boss1Controller.healthyMaterial;
+            //shaderMeshRenderers[i].material = boss1Controller.healthyMaterial;
+            MaterialPropertyBlock mpb = new MaterialPropertyBlock();
+            shaderMeshRenderers[i].GetPropertyBlock(mpb);
+            mpb.SetFloat("_Transition", 1 - ((float)currentHealth / (float)maxHealth));
+            shaderMeshRenderers[i].SetPropertyBlock(mpb);
         }
         damaged = false;
         currentHealth = maxHealth;

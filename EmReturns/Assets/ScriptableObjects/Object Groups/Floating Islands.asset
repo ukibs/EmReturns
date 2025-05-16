@@ -16,9 +16,9 @@ MonoBehaviour:
   - prefabs:
     - {fileID: 9040823803390188681, guid: 0296b93a180ca72489fcdbece2c47086, type: 3}
     - {fileID: 9040823803390188681, guid: f1cbb7d11cd7895488516b46879cc499, type: 3}
-    objectDensity: 0.25
+    objectDensity: 0.15
     xObjects: 100
-    yObjects: 10
+    yObjects: 20
     zObjects: 100
     xDistance: 200
     yDistance: 100

@@ -257,3 +257,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lazerLineRenderer: {fileID: 3783590980732914419}
   firingClip: {fileID: 8300000, guid: c371bfbeb9245b0468ec598cd07d0e08, type: 3}
+  segmentPrefab: {fileID: 5068918597902269546, guid: 3d8aba51f621a8146b8b9dcfa878a76a, type: 3}
+  rateOfFire: 10
+  lineRenderer: {fileID: 0}

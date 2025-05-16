@@ -20,7 +20,7 @@ public class RapidFireBulletController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CheckRaycastCollissions();
+        //CheckRaycastCollissions();
     }
 
     private void CheckRaycastCollissions()
@@ -51,12 +51,14 @@ public class RapidFireBulletController : MonoBehaviour
         ContactPoint contactPoint = collision.GetContact(0);
         GameObject impactParticles = Instantiate(impactParticlesPrefab, transform.position, Quaternion.LookRotation(contactPoint.normal));
         //Debug.Log(impactParticles);
-        Debug.Log("Collission with: " + collision.gameObject.name);
+        //Debug.Log("Collission with: " + collision.gameObject.name);
         //
         Boss1SegmentController segmentController = collision.collider.GetComponentInParent<Boss1SegmentController>();
         if(segmentController != null)
         {
-            segmentController.SufferDamage(2);   
+            int damageToApply = (int)(rb.velocity.magnitude * rb.mass);
+            //Debug.Log("Rapid fire - Damage to apply: " + damageToApply);
+            segmentController.SufferDamage(damageToApply);   
         }
         Boss1EnergyBall boss1EnergyBall = collision.collider.GetComponent<Boss1EnergyBall>();
         if (boss1EnergyBall != null)

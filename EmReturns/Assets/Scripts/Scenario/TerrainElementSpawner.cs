@@ -6,11 +6,24 @@ public class TerrainElementSpawner : MonoBehaviour
 {
     //
     public GameObject terrainElementControllerPrefab;
-    public ObjectGroupSO objectGroupSO;
+    public GameObject terrainGenerator;
+
+    //
+    private LevelManager levelManager;
+    private ObjectGroupSO objectGroupSO;
 
     // Start is called before the first frame update
     void Start()
     {
+        //
+        levelManager = GetComponent<LevelManager>();
+        objectGroupSO = levelManager.levelDataSO.objectGroup;
+        //
+        if (levelManager.levelDataSO.useTerrain)
+        {
+            terrainGenerator.SetActive(true);
+        }
+        //
         Debug.Log("Spawning terrain objects");
         //SpawnObjects();
         SpawnObjectGroups();

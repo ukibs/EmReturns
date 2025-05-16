@@ -50,7 +50,7 @@ public class TerrainElementController : MonoBehaviour
             && terrainElement.activeSelf == false
         )
         {
-            Debug.Log("Activating terrain element");
+            //Debug.Log("Activating terrain element");
             terrainElement.SetActive(true);
         }
         else if (
@@ -59,7 +59,7 @@ public class TerrainElementController : MonoBehaviour
             && terrainElement.activeSelf == true
         )
         {
-            Debug.Log("Deactivating terrain element");
+            //Debug.Log("Deactivating terrain element");
             terrainElement.SetActive(false);
         }
     }

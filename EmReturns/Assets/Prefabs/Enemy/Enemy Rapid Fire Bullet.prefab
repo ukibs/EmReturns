@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1537997117196892316}
   - component: {fileID: 781420338916391013}
   - component: {fileID: 3237083948648443690}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7781553820448272087}
   - component: {fileID: 7781553820448272040}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -146,7 +146,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b55aed6ea39bd81498b5ffa19bace234, type: 2}
+  - {fileID: 2100000, guid: 9740360812ee88d479479f184765177a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -245,7 +245,7 @@ GameObject:
   - component: {fileID: 7781553820510654814}
   - component: {fileID: 7781553820510654813}
   - component: {fileID: 7781553820510654812}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -326,7 +326,7 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
-  m_Height: 50
+  m_Height: 100
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7781553820730823322
@@ -339,9 +339,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7781553820730823325}
   - component: {fileID: 7781553820730823324}
-  - component: {fileID: 7781553820730823323}
-  m_Layer: 0
-  m_Name: Rapid Fire Bullet
+  - component: {fileID: 8554140182086969311}
+  m_Layer: 12
+  m_Name: Enemy Rapid Fire Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -355,7 +355,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7781553820730823322}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.81, y: 10, z: -4.152}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7781553820510654811}
@@ -380,7 +380,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &7781553820730823323
+--- !u!114 &8554140182086969311
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -389,7 +389,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7781553820730823322}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 897287b4b37c6d749bcfe537564450a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d1444ccc2042024c94730f7ab095afd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   impactParticlesPrefab: {fileID: 6683184678176795448, guid: 8f7341636241656408948699b2776790, type: 3}

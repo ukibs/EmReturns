@@ -25,8 +25,9 @@ public class EnemyDamager : MonoBehaviour
         Boss1SegmentController boss1SegmentController = collision.collider.GetComponentInParent<Boss1SegmentController>();
         if (boss1SegmentController && rb)
         {
-            Debug.Log("Applying damage to boss");
-            boss1SegmentController.SufferDamage((int)rb.velocity.magnitude);
+            int damageToApply = (int)(rb.velocity.magnitude * rb.mass);
+            //Debug.Log("Applying damage to boss: " + damageToApply);
+            boss1SegmentController.SufferDamage(damageToApply);
         }
         //
         Boss1Controller boss1Controller = collision.collider.GetComponentInParent<Boss1Controller>();

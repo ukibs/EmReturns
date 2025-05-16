@@ -30,8 +30,7 @@ public class FinishingChargerBall : MonoBehaviour
         if(other.gameObject.layer == 6)
         {
             Destroy(gameObject);
-            // TODO: Pawa para el player
-            Debug.Log("Loading player finisher");
+            //Debug.Log("Loading player finisher");
             EM_PlayerController.Instance.GetFinisherEnergy();
         }
     }

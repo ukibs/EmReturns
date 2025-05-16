@@ -46,6 +46,7 @@ public class EM_ShovelController : MonoBehaviour
     public AudioClip propulsionClip;
     public AudioClip shootClip;
     public AudioClip grabClip;
+    public AudioClip cannotGrabClip;
     public AudioClip rapidFireClip;
     [Header("Debug")]
     public TMP_Text grabbingDistanceIndicator;
@@ -202,7 +203,11 @@ public class EM_ShovelController : MonoBehaviour
             //Debug.Log("Checking grabbing point: " + hitInfo.transform.gameObject.name + " - layer: " + hitInfo.transform.gameObject.layer);
             //Debug.Log("Checking grabbing point: " + hitInfo.collider.gameObject.name + " - layer: " + hitInfo.collider.gameObject.layer);
             //
-            if (hitInfo.collider.gameObject.layer == 8 || hitInfo.collider.gameObject.layer == 9) return false;
+            if (hitInfo.collider.gameObject.layer == 8 || hitInfo.collider.gameObject.layer == 9)
+            {
+                AudioManager.Instance.Play2dFx(transform.position, cannotGrabClip, 1f);
+                return false;
+            }
             //
             Rigidbody hitRigidbody = hitInfo.transform.GetComponent<Rigidbody>();
             if (hitRigidbody)
@@ -436,7 +441,7 @@ public class EM_ShovelController : MonoBehaviour
     {
         if (hookedRb)
         {
-            Debug.Log("Releasing shot");
+            //Debug.Log("Releasing shot");
             // Si lo que soltamos es el el finisher...
             FinisherLazerController finisherLazerController = hookedRb.GetComponent<FinisherLazerController>();
             if (finisherLazerController)
@@ -447,6 +452,7 @@ public class EM_ShovelController : MonoBehaviour
             {
                 // Si lo que vamos a lanzar es el pulso de energía...
                 EnergyPulseAttack energyPulseAttack = hookedRb.GetComponent<EnergyPulseAttack>();
+                float forceMultiplier = 1;
                 if (energyPulseAttack)
                 {
                     energyPulseAttack.transform.forward = transform.forward;
@@ -455,15 +461,16 @@ public class EM_ShovelController : MonoBehaviour
                 else
                 {
                     hookedRb.gameObject.AddComponent<EnemyDamager>();
+                    forceMultiplier = 10;
                 }
                 //
                 // Debug.Log("Shooting pulse attack - Proyectile: " + loadAmount);
                 //
-                hookedRb.AddForce(transform.forward * loadAmount * pulseForce, ForceMode.Impulse);
+                hookedRb.AddForce(transform.forward * loadAmount * pulseForce * forceMultiplier, ForceMode.Impulse);
                 rb.AddForce(-transform.forward * 0.1f * loadAmount * pulseForce, ForceMode.Impulse);
                 //
                 //CameraEffects.Instance.ShakeEffect(0.15f, 1, 10);
-                CameraEffects.Instance.FovEffect(0.1f, 50);
+                //CameraEffects.Instance.FovEffect(0.1f, 50);
             }            
             loadAmount = 0;
             loadBar.fillAmount = 0;
@@ -476,15 +483,18 @@ public class EM_ShovelController : MonoBehaviour
     }
 
     public void ReleaseChargeForward()
-    {
+    {        
         ReturnShovelsToIdle();
+        float loadAmountToUse = loadAmount;
         EM_PlayerController.Instance.GetRagdolled();
         EM_PlayerController.Instance.offensiveShield.SetActive(true);
         //
         //CameraEffects.Instance.ShakeEffect(0.15f, 2, 10);
         //CameraEffects.Instance.FovEffect(0.15f, 50);
         //
-        rb.AddForce(transform.forward * loadAmount * pulseForce, ForceMode.Impulse);
+        Vector3 forceToAdd = transform.forward * loadAmountToUse * pulseForce;
+        //Debug.Log("Releasing charge forward with force: " + forceToAdd);
+        rb.AddForce(forceToAdd, ForceMode.Impulse);
         //
         AudioManager.Instance.Play3dFx(transform.position, shootClip, 0.6f);
         //
@@ -492,7 +502,7 @@ public class EM_ShovelController : MonoBehaviour
         loadBar.fillAmount = 0;
     }
 
-    public void CheckAndDestroyFinisherController()
+    public bool CheckAndDestroyFinisherController()
     {
         if (hookedRb)
         {
@@ -502,8 +512,10 @@ public class EM_ShovelController : MonoBehaviour
             if (finisherLazerController)
             {
                 Destroy(hookedRb.gameObject);
+                return true;
             }
         }
+        return false;
     }
 
     IEnumerator RapidFireCoroutine()

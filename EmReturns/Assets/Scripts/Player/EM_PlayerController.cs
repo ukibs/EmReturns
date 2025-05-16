@@ -223,13 +223,15 @@ public class EM_PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("EM Player controller collission: " + collision.gameObject.name);
+        //Debug.Log("EM Player controller collission: " + collision.gameObject.name);
         if (offensiveShield.activeSelf)
         {
             Boss1SegmentController segmentController = collision.collider.GetComponentInParent<Boss1SegmentController>();
             if (segmentController != null)
             {
-                segmentController.SufferDamage((int)rb.velocity.magnitude);
+                int damageToApply = (int)(rb.velocity.magnitude * rb.mass);
+                Debug.Log("Rapid fire - Damage to apply: " + damageToApply);
+                segmentController.SufferDamage(damageToApply);
             }
         }
     }
@@ -608,7 +610,7 @@ public class EM_PlayerController : MonoBehaviour
                 dead = true;
             }
         }
-        Debug.Log("Attack received, current shield: " + currentShield + " - Current shield bar filled: " + currentShieldBarFilled + " - Max health: " + maxHealth);
+        //Debug.Log("Attack received, current shield: " + currentShield + " - Current shield bar filled: " + currentShieldBarFilled + " - Max health: " + maxHealth);
         // TODO:
         //shieldBarFront.fillAmount = currentShield / maxShields;
         //finisherBar.fillAmount = currentHealth / maxHealth;
@@ -697,23 +699,38 @@ public class EM_PlayerController : MonoBehaviour
 
     public void SpendFinisherEnergy()
     {
-        float dt = Time.deltaTime;
-        currentFinisherEnergy -= dt * 100f / finisherDuration;
+        //float dt = Time.deltaTime;
+        // currentFinisherEnergy -= dt * 100f / finisherDuration;
+
         // TODO:
         //finisherBarFront.fillAmount = currentFinisherEnergy / 100f;
         //
-        boss1Controller.SufferDamage(dt);
-        boss1Controller.GetComponent<FakeRigidbody>().AddForce(transform.forward * 10);
+        //boss1Controller.SufferDamage(dt);
+        //boss1Controller.GetComponent<FakeRigidbody>().AddForce(transform.forward * 10);
         //
-        if(currentFinisherEnergy <= 0)
+        if (finisherActive)
         {
-            currentFinisherEnergy = 0;
-            finisherActive = false;
-            finisherBarAnimator.SetBool("Full", false);
+            currentFinisherEnergy--;
             //
-            EM_ShovelController.Instance.CheckAndDestroyFinisherController();
-            //            
-            boss1Controller.EndPhase();
-        }
+            if (currentFinisherEnergy <= 0)
+            {
+                Debug.Log("Ending boss phase");
+                //
+                bool finisherDestroyed = EM_ShovelController.Instance.CheckAndDestroyFinisherController();
+                //
+                if (finisherDestroyed)
+                {
+                    if (!boss1Controller)
+                    {
+                        boss1Controller = FindObjectOfType<Boss1Controller>();
+                    }
+                    boss1Controller.EndPhase();
+                }                    
+                //
+                currentFinisherEnergy = 0;
+                finisherActive = false;
+                finisherBarAnimator.SetBool("Full", false);
+            }
+        }            
     }
 }

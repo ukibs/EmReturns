@@ -15,7 +15,7 @@ MonoBehaviour:
   objectGroups:
   - prefabs:
     - {fileID: 9040823803390188681, guid: 442b86e2791efba409aca78c5eba0745, type: 3}
-    objectDensity: 1
+    objectDensity: 0.2
     xObjects: 100
     yObjects: 1
     zObjects: 100

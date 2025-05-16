@@ -253,7 +253,7 @@ public class CameraController : MonoBehaviour
 
     public Transform ChangeBossSegmentObjective(Vector2 direction)
     {
-        Debug.Log("Changing boss segment objective");
+        //Debug.Log("Changing boss segment objective");
         //
         Transform selectedObjective = null;
         //Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);

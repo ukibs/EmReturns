@@ -13,6 +13,8 @@ public class LevelManager : MonoBehaviour
     public TMP_Text endMessage;
     public AudioClip victoryClip;
     public AudioClip defeatClip;
+    public GameObject terrainGenerator;
+    public LevelDataSO levelDataSO;
 
     //
     private static LevelManager instance;
@@ -27,6 +29,11 @@ public class LevelManager : MonoBehaviour
         //
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        //
+        if (levelDataSO.enemyToSpawn)
+        {
+            Instantiate(levelDataSO.enemyToSpawn, new Vector3(0, 500, 1000), Quaternion.identity);
+        }
     }
 
     // Update is called once per frame
