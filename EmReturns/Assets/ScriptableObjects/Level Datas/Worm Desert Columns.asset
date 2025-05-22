@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectGroup: {fileID: 11400000, guid: b2f19ba69b092f541b2dd37629d5ca69, type: 2}
   useTerrain: 1
-  enemyToSpawn: {fileID: 2469443514992314029, guid: c05b7a7d317259541852456c3c9d299f, type: 3}
+  enemyToSpawn: {fileID: 6028016815351250566, guid: 1cf7741d32bb4f54dadf3faf83214fa0, type: 3}
+  skyboxMaterial: {fileID: 0}

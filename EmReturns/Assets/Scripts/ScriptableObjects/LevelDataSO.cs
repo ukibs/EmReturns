@@ -8,4 +8,5 @@ public class LevelDataSO : ScriptableObject
     public ObjectGroupSO objectGroup;
     public bool useTerrain;
     public GameObject enemyToSpawn;
+    public Material skyboxMaterial;
 }

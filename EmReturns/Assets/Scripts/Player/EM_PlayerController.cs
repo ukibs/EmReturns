@@ -202,7 +202,10 @@ public class EM_PlayerController : MonoBehaviour
         }
         else
         {
-            usableMarker.gameObject.SetActive(false);
+            if (usableMarker)
+            {
+                usableMarker.gameObject.SetActive(false);
+            }            
         }
 
         // Si el finisher est activo solo puedes fijar la cabeza
@@ -218,7 +221,10 @@ public class EM_PlayerController : MonoBehaviour
     //
     private void LateUpdate()
     {
-        speedIndicator.text = (int)(rb.velocity.magnitude * 3.6f) + " km/h";
+        if (speedIndicator)
+        {
+            speedIndicator.text = (int)(rb.velocity.magnitude * 3.6f) + " km/h";
+        }        
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -244,12 +250,23 @@ public class EM_PlayerController : MonoBehaviour
         currentFinisherEnergyFilled += Mathf.Sign(currentFinisherEnergy - currentFinisherEnergyFilled) * 3.5f * dt;
 
         // Shield bars
-        shieldBarBack.fillAmount = (currentShieldBarFilled > currentShield) ? currentShieldBarFilled / maxShields : currentShield / maxShields;
-        shieldBarFront.fillAmount = (currentShieldBarFilled <= currentShield) ? currentShieldBarFilled / maxShields : currentShield / maxShields;
-
+        if (shieldBarBack)
+        {
+            shieldBarBack.fillAmount = (currentShieldBarFilled > currentShield) ? currentShieldBarFilled / maxShields : currentShield / maxShields;
+        }        
+        if (shieldBarFront)
+        {
+            shieldBarFront.fillAmount = (currentShieldBarFilled <= currentShield) ? currentShieldBarFilled / maxShields : currentShield / maxShields;
+        }
         // Finisher bars
-        finisherBarBack.fillAmount = (currentFinisherEnergyFilled > currentFinisherEnergy) ? currentFinisherEnergyFilled / 100f : currentFinisherEnergy / 100f;
-        finisherBarFront.fillAmount = (currentFinisherEnergyFilled <= currentFinisherEnergy) ? currentFinisherEnergyFilled / 100f : currentFinisherEnergy / 100f;
+        if (finisherBarBack)
+        {
+            finisherBarBack.fillAmount = (currentFinisherEnergyFilled > currentFinisherEnergy) ? currentFinisherEnergyFilled / 100f : currentFinisherEnergy / 100f;
+        }        
+        if (finisherBarFront)
+        {
+            finisherBarFront.fillAmount = (currentFinisherEnergyFilled <= currentFinisherEnergy) ? currentFinisherEnergyFilled / 100f : currentFinisherEnergy / 100f;
+        }        
     }
 
     //
@@ -393,8 +410,11 @@ public class EM_PlayerController : MonoBehaviour
         }
         else
         {
-            if (objectiveMarker.gameObject.activeSelf)
-                objectiveMarker.gameObject.SetActive(false);
+            if (objectiveMarker)
+            {
+                if (objectiveMarker.gameObject.activeSelf)
+                    objectiveMarker.gameObject.SetActive(false);
+            }            
         }
     }
 
@@ -447,18 +467,21 @@ public class EM_PlayerController : MonoBehaviour
     void CheckHazards()
     {
         // On screen
-        nearestHazardOnScreen = cameraController.GetNearestObjectiveToScreenCenter<Hazard>(shovelController.hookedRb);
-        if(nearestHazardOnScreen != null)
+        if (hazardMarker)
         {
-            Vector3 nearestHazardScreenPosition = Camera.main.WorldToScreenPoint(nearestHazardOnScreen.position);
-            //hazardMarker.anchoredPosition = new Vector2((nearestHazardScreenPosition.x - 0.5f) * (Screen.width / 2), (nearestHazardScreenPosition.y - 0.5f) * (Screen.height / 2));
-            hazardMarker.anchoredPosition = nearestHazardScreenPosition;
-            hazardMarker.gameObject.SetActive(true);
-        }
-        else
-        {
-            hazardMarker.gameObject.SetActive(false);
-        }
+            nearestHazardOnScreen = cameraController.GetNearestObjectiveToScreenCenter<Hazard>(shovelController.hookedRb);
+            if (nearestHazardOnScreen != null)
+            {
+                Vector3 nearestHazardScreenPosition = Camera.main.WorldToScreenPoint(nearestHazardOnScreen.position);
+                //hazardMarker.anchoredPosition = new Vector2((nearestHazardScreenPosition.x - 0.5f) * (Screen.width / 2), (nearestHazardScreenPosition.y - 0.5f) * (Screen.height / 2));
+                hazardMarker.anchoredPosition = nearestHazardScreenPosition;
+                hazardMarker.gameObject.SetActive(true);
+            }
+            else
+            {
+                hazardMarker.gameObject.SetActive(false);
+            }
+        }        
 
         // In total
         nearestHazard = cameraController.GetNearestObjectiveToPlayer<Hazard>(shovelController.hookedRb);
@@ -475,18 +498,21 @@ public class EM_PlayerController : MonoBehaviour
 
     void CheckUsables()
     {
-        nearestUsable = cameraController.GetNearestObjectiveToScreenCenter<Scenario>(shovelController.hookedRb);
-        if (nearestUsable != null)
+        if (usableMarker)
         {
-            Vector3 nearestUsableScreenPosition = Camera.main.WorldToScreenPoint(nearestUsable.position);
-            //usableMarker.anchoredPosition = new Vector2((nearestUsableScreenPosition.x - 0.5f) * (Screen.width / 2), (nearestUsableScreenPosition.y - 0.5f) * (Screen.height / 2));
-            usableMarker.anchoredPosition = nearestUsableScreenPosition;
-            usableMarker.gameObject.SetActive(true);
-        }
-        else
-        {
-            usableMarker.gameObject.SetActive(false);
-        }
+            nearestUsable = cameraController.GetNearestObjectiveToScreenCenter<Scenario>(shovelController.hookedRb);
+            if (nearestUsable != null)
+            {
+                Vector3 nearestUsableScreenPosition = Camera.main.WorldToScreenPoint(nearestUsable.position);
+                //usableMarker.anchoredPosition = new Vector2((nearestUsableScreenPosition.x - 0.5f) * (Screen.width / 2), (nearestUsableScreenPosition.y - 0.5f) * (Screen.height / 2));
+                usableMarker.anchoredPosition = nearestUsableScreenPosition;
+                usableMarker.gameObject.SetActive(true);
+            }
+            else
+            {
+                usableMarker.gameObject.SetActive(false);
+            }
+        }        
     }
 
     void CheckAndLook(Vector3 movementDirection)
@@ -564,11 +590,17 @@ public class EM_PlayerController : MonoBehaviour
         ragdolled = true;
         currentRagdollDuration = 0;
         currentInvulnerabilityDuration = 0;
-        recoverLetter.SetActive(true);
+        if (recoverLetter)
+        {
+            recoverLetter.SetActive(true);
+        }        
         rb.freezeRotation = false;
 
         EM_ShovelController.Instance.loadAmount = 0;
-        EM_ShovelController.Instance.loadBar.fillAmount = 0;
+        if (EM_ShovelController.Instance.loadBar)
+        {
+            EM_ShovelController.Instance.loadBar.fillAmount = 0;
+        }        
     }
 
     public void ApplyDamage(int damage)
@@ -633,10 +665,16 @@ public class EM_PlayerController : MonoBehaviour
     void UpdateRagdollState(float dt)
     {
         currentRagdollDuration += dt;
-        recoverBar.fillAmount = currentRagdollDuration / ragdollDuration;
+        if (recoverBar)
+        {
+            recoverBar.fillAmount = currentRagdollDuration / ragdollDuration;
+        }        
         if (!offensiveShield.activeSelf)
         {
-            damageImage.color = new Color(255, 0, 0, 0.5f - (currentRagdollDuration / ragdollDuration * 0.5f));
+            if (damageImage)
+            {
+                damageImage.color = new Color(255, 0, 0, 0.5f - (currentRagdollDuration / ragdollDuration * 0.5f));
+            }            
         }
         if(currentRagdollDuration >= ragdollDuration)
         {            
@@ -646,14 +684,22 @@ public class EM_PlayerController : MonoBehaviour
 
     void RestoreControls()
     {
-        if(offensiveShield.activeSelf)
+        if (offensiveShield.activeSelf)
+        {
             offensiveShield.SetActive(false);
-        recoverBar.fillAmount = 0;
+        }            
+        if (recoverBar)
+        {
+            recoverBar.fillAmount = 0;
+        }        
         ragdolled = false;
         rb.freezeRotation = true;
         transform.eulerAngles = Vector3.zero;
         AudioManager.Instance.Play3dFx(transform.position, restorationClip, 1);
-        recoverLetter.SetActive(false);
+        if (recoverLetter)
+        {
+            recoverLetter.SetActive(false);
+        }        
     }
 
     void RecoverShield(float dt)
@@ -673,9 +719,11 @@ public class EM_PlayerController : MonoBehaviour
             if(dashChargeAmount > 1)
                 dashChargeAmount = 1;
             //
-            recoverBar.fillAmount = dashChargeAmount;
-        }
-        
+            if (recoverBar)
+            {
+                recoverBar.fillAmount = dashChargeAmount;
+            }            
+        }        
     }
 
     public void GetFinisherEnergy(int energy = 1)

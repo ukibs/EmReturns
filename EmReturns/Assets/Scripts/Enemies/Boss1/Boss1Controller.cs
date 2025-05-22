@@ -7,8 +7,6 @@ using UnityEngine.InputSystem;
 
 public class Boss1Controller : MonoBehaviour
 {
-    
-
     //
     public enum LazerState
     {

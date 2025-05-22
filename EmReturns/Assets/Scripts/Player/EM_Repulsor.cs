@@ -72,15 +72,24 @@ public class EM_Repulsor : MonoBehaviour
                 //
                 Vector3 forceToApply = transform.up * (offsetCompensation + speedCompensation) * rb.mass;
                 rb.AddForce(forceToApply, ForceMode.Impulse);
-                //                
-                forceUpText.text = forceToApply.y + "";
+                //
+                if (forceUpText)
+                {
+                    forceUpText.text = forceToApply.y + "";
+                }                    
             }
             else
             {
-                forceUpText.text = "0";
+                if (forceUpText)
+                {
+                    forceUpText.text = "0";
+                }
             }
             //
-            forceDownText.text = (rb.velocity * rb.mass).y + "";
+            if (forceDownText)
+            {
+                forceDownText.text = (rb.velocity * rb.mass).y + "";
+            }            
             //
             return true;
         }

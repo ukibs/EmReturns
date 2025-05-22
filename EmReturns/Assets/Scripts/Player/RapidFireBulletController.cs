@@ -63,6 +63,11 @@ public class RapidFireBulletController : MonoBehaviour
         Boss1EnergyBall boss1EnergyBall = collision.collider.GetComponent<Boss1EnergyBall>();
         if (boss1EnergyBall != null)
             boss1EnergyBall.OnCollisionEnter(collision);
+        EnemyHealth enemyHealth = collision.collider.GetComponent<EnemyHealth>();
+        if (enemyHealth != null)
+        {
+            enemyHealth.SufferDamage(1);
+        }
         //
         Destroy(gameObject);
     }

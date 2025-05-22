@@ -159,8 +159,10 @@ public class EM_ShovelController : MonoBehaviour
                     {
                         loadAmount += dt;
                         loadAmount = Mathf.Min(loadAmount, 1);
-                        loadBar.fillAmount = loadAmount;
-
+                        if (loadBar)
+                        {
+                            loadBar.fillAmount = loadAmount;
+                        }
                         if(loadAmount == 1)
                             AudioManager.Instance.PlayLoadFx(loadingReadyClip, false, 1);
                     }
@@ -250,7 +252,10 @@ public class EM_ShovelController : MonoBehaviour
         //
         Vector3 hookDirection = currentShovelPosturePositions.position - transform.position;
         Debug.DrawLine(currentShovelPosturePositions.position, transform.position, Color.blue);
-        grabbingDistanceIndicator.text = (int)hookDirection.magnitude + "";
+        if (grabbingDistanceIndicator)
+        {
+            grabbingDistanceIndicator.text = (int)hookDirection.magnitude + "";
+        }        
         // TODO: Magnitud segun el tamaño del objeto agarrado
         //if(hookDirection.sqrMagnitude < 100)
         //if (hookDirection.magnitude < 10)
@@ -473,7 +478,10 @@ public class EM_ShovelController : MonoBehaviour
                 //CameraEffects.Instance.FovEffect(0.1f, 50);
             }            
             loadAmount = 0;
-            loadBar.fillAmount = 0;
+            if (loadBar)
+            {
+                loadBar.fillAmount = 0;
+            }            
             hookedRb = null;
             hookedRbPoint.localPosition = hookedRbPointOriginalPosition;
             //
@@ -499,7 +507,10 @@ public class EM_ShovelController : MonoBehaviour
         AudioManager.Instance.Play3dFx(transform.position, shootClip, 0.6f);
         //
         loadAmount = 0;
-        loadBar.fillAmount = 0;
+        if (loadBar)
+        {
+            loadBar.fillAmount = 0;
+        }        
     }
 
     public bool CheckAndDestroyFinisherController()

@@ -15,3 +15,4 @@ MonoBehaviour:
   objectGroup: {fileID: 11400000, guid: c2be3d1716c766b48b17f556ff567ff4, type: 2}
   useTerrain: 0
   enemyToSpawn: {fileID: 2469443514992314029, guid: c05b7a7d317259541852456c3c9d299f, type: 3}
+  skyboxMaterial: {fileID: 2100000, guid: 2441c79940171dc43b33badf9fe97828, type: 2}

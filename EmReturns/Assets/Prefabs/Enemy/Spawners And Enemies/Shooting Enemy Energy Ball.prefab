@@ -44,10 +44,12 @@ GameObject:
   - component: {fileID: 5219488267639990759}
   - component: {fileID: 5219488267639990758}
   - component: {fileID: 5219488267639990753}
-  - component: {fileID: 5219488267639990762}
   - component: {fileID: 5415010982452860543}
   - component: {fileID: -3431373196088484480}
   - component: {fileID: 4541536004529259191}
+  - component: {fileID: 351606582362620479}
+  - component: {fileID: 7973095707459793294}
+  - component: {fileID: 8928628753705231474}
   m_Layer: 13
   m_Name: Shooting Enemy Energy Ball
   m_TagString: Untagged
@@ -148,25 +150,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5219488267639990762
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5219488267639990752}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 885b9b4343357ca43a204db7be79bdcf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onImpactSound: {fileID: 8300000, guid: 3b26d7632f08ae14a9f0924d19617ef9, type: 3}
-  explosionDuration: 0.8
-  maxSizeBeforeDisapearing: 100
-  explosionForce: 50
-  forceTowardsPlayer: 200
-  checkDistance: 1
-  timeToExplode: 15
 --- !u!96 &5415010982452860543
 TrailRenderer:
   serializedVersion: 2
@@ -305,6 +288,55 @@ MonoBehaviour:
   rapidFireClip: {fileID: 8300000, guid: 8806be81130ba0b4baae63ac7c15b3b4, type: 3}
   fireRate: 0
   rapidFireForce: 50
+--- !u!114 &351606582362620479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5219488267639990752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a6ad0839b7dcc14c8b887a87b5f6ebf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 5
+  shaderMeshRenderers:
+  - {fileID: 5219488267639990759}
+  onDamageClip: {fileID: 8300000, guid: 98de588fd9c4fc6468f2b4ff5e5c026e, type: 3}
+  onDeathClip: {fileID: 8300000, guid: 3b26d7632f08ae14a9f0924d19617ef9, type: 3}
+  isDead: 0
+--- !u!114 &7973095707459793294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5219488267639990752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2552320adf8b6d54d8b3fb8a3dd989f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onImpactSound: {fileID: 8300000, guid: 3b26d7632f08ae14a9f0924d19617ef9, type: 3}
+  explosionDuration: 0.8
+  maxSizeBeforeDisapearing: 100
+  explosionForce: 50
+--- !u!114 &8928628753705231474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5219488267639990752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01ce6b57fa8ffb641bfb9b1b376a401f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  behaviour: 0
+  movementSpeed: 50
+  rotationSpeed: 180
 --- !u!1 &5536286654846126085
 GameObject:
   m_ObjectHideFlags: 0
