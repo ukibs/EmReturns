@@ -1,15 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class TutorialManager : MonoBehaviour
 {
     public TutorialStepSO[] tutorialSteps;
+    public GameObject tutorialStepsParent;
+    public Transform[] tutorialStepsObjects;
     public AudioClip[] emSounds;
+    public TMP_Text tutorialText;
 
     private static TutorialManager instance;
     private int currentStep = 0;
-
+    private int currentObjetiveNumber = 0;
 
     public static TutorialManager Instance
     {
@@ -20,6 +24,7 @@ public class TutorialManager : MonoBehaviour
     void Start()
     {
         instance = this;
+        tutorialText.text = tutorialSteps[currentStep].text;
     }
 
     // Update is called once per frame
@@ -32,7 +37,23 @@ public class TutorialManager : MonoBehaviour
     {
         Debug.Log("Cheking objective reached");
         //tutorialSteps[currentStep].
-        PlayRandomEmSound();
+        //PlayRandomEmSound();
+        EM_VoiceController.Instance.PlayVoiceGroup("misc");
+
+        currentObjetiveNumber++;
+        if(currentObjetiveNumber >= tutorialSteps[currentStep].objectiveNumber)
+        {
+            NextPhase();
+        }
+    }
+
+    void NextPhase()
+    {
+        tutorialStepsParent.transform.GetChild(currentStep).gameObject.SetActive(false);
+        currentStep++;
+        currentObjetiveNumber = 0;
+        tutorialText.text = tutorialSteps[currentStep].text;
+        tutorialStepsParent.transform.GetChild(currentStep).gameObject.SetActive(true);
     }
 
     void PlayRandomEmSound()

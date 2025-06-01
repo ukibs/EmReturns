@@ -5,6 +5,7 @@ using UnityEngine;
 public class TutorialObjective : MonoBehaviour
 {
     private MaterialDissolver materialDissolver;
+    private bool activated = false;
 
     // Start is called before the first frame update
     void Start()
@@ -21,7 +22,11 @@ public class TutorialObjective : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("On trigger enter");
-        TutorialManager.Instance.CheckAndNextPhase();
-        materialDissolver.StartDissolution(-1);
+        if (!activated)
+        {
+            TutorialManager.Instance.CheckAndNextPhase();
+            materialDissolver.StartDissolution(-1);
+            activated = true;
+        }        
     }
 }

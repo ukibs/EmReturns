@@ -381,7 +381,10 @@ public class EM_ShovelController : MonoBehaviour
             //
             switch (nextState)
             {
-                case ShovelsState.Hooked: currentShovelPosturePositions = shovelPosturesPositions[0]; break;
+                case ShovelsState.Hooked: 
+                    currentShovelPosturePositions = shovelPosturesPositions[0]; 
+                    EM_VoiceController.Instance.PlayVoiceGroup("hook");
+                    break;
                 case ShovelsState.HookingRB: 
                     currentShovelPosturePositions = shovelPosturesPositions[1]; 
                     break;
@@ -401,18 +404,21 @@ public class EM_ShovelController : MonoBehaviour
                         }                                               
                     }
                     AudioManager.Instance.PlayLoadFx(loadingClip, false, 1);
+                    EM_VoiceController.Instance.PlayVoiceGroup("pulse_load");
                     break;
                 case ShovelsState.Sprint:
                     currentShovelPosturePositions = shovelPosturesPositions[2];
                     powerTrail.transform.localPosition = currentShovelPosturePositions.localPosition;
                     powerTrail.SetActive(true);
                     AudioManager.Instance.PlayLoadFx(propulsionClip, true, 1);
+                    EM_VoiceController.Instance.PlayVoiceGroup("sprint");
                     break;
                 case ShovelsState.VerticalImpulse:
                     currentShovelPosturePositions = shovelPosturesPositions[3];
                     powerTrail.transform.localPosition = currentShovelPosturePositions.localPosition;
                     powerTrail.SetActive(true);
                     AudioManager.Instance.PlayLoadFx(propulsionClip, true, 1);
+                    EM_VoiceController.Instance.PlayVoiceGroup("vertical_impulse");
                     break;
                 case ShovelsState.RapidFire:
                     //Debug.Log("Starting rapid fire");
@@ -428,6 +434,7 @@ public class EM_ShovelController : MonoBehaviour
                 case ShovelsState.LoadingChargeForward:
                     currentShovelPosturePositions = shovelPosturesPositions[6];
                     AudioManager.Instance.PlayLoadFx(loadingClip, false, 1);
+                    EM_VoiceController.Instance.PlayVoiceGroup("charge_load");
                     break;
             }
             //
@@ -486,6 +493,7 @@ public class EM_ShovelController : MonoBehaviour
             hookedRbPoint.localPosition = hookedRbPointOriginalPosition;
             //
             AudioManager.Instance.Play3dFx(transform.position, shootClip, 0.6f);
+            EM_VoiceController.Instance.PlayVoiceGroup("pulse_fire");
         }
         ReturnShovelsToIdle();
     }
@@ -505,6 +513,7 @@ public class EM_ShovelController : MonoBehaviour
         rb.AddForce(forceToAdd, ForceMode.Impulse);
         //
         AudioManager.Instance.Play3dFx(transform.position, shootClip, 0.6f);
+        EM_VoiceController.Instance.PlayVoiceGroup("charge_forward");
         //
         loadAmount = 0;
         if (loadBar)
