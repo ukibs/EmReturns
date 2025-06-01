@@ -617,6 +617,7 @@ public class EM_PlayerController : MonoBehaviour
             GetRagdolled();
             shovelController.ReturnShovelsToIdle();
             AudioManager.Instance.Play3dFx(transform.position, damageClip, 0.5f);
+            EM_VoiceController.Instance.PlayVoiceGroup("damage");
             //
             //CameraEffects.Instance.ShakeEffect(0.15f, 2, 10);
             CameraEffects.Instance.FovEffect(0.15f, 50);
@@ -696,6 +697,7 @@ public class EM_PlayerController : MonoBehaviour
         rb.freezeRotation = true;
         transform.eulerAngles = Vector3.zero;
         AudioManager.Instance.Play3dFx(transform.position, restorationClip, 1);
+        EM_VoiceController.Instance.PlayVoiceGroup("restoration");
         if (recoverLetter)
         {
             recoverLetter.SetActive(false);
