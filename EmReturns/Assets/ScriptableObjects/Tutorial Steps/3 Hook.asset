@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b9b9749ab7d8ade48a054a49474393ac, type: 3}
-  m_Name: 1 Movement
+  m_Name: 3 Hook
   m_EditorClassIdentifier: 
-  text: Use Left shift/B for sprint
-  objectiveNumber: 4
+  text: Mouse right/R1 to hook
+  objectiveNumber: 1

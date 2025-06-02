@@ -8,11 +8,17 @@ public class DestructibleObject : MonoBehaviour
     public float resistance = 50;
     public GameObject destroyedVersion;
     public AudioClip destructionClip;
+    //
+    private TutorialDestructibleObjective tutorialDestructibleObjective;
+
+    //
+    [HideInInspector] public bool isDestroyed = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        //tutorialDestructibleObjective = GetComponent<TutorialDestructibleObjective>();
+        //Debug.Log(tutorialDestructibleObjective);
     }
 
     // Update is called once per frame
@@ -23,7 +29,7 @@ public class DestructibleObject : MonoBehaviour
 
     public void OnCollisionEnter(Collision collision)
     {
-        //Debug.Log(collision.collider);
+        Debug.Log(collision.collider);
         //Rigidbody rb = collision.collider.GetComponent<Rigidbody>();
         Rigidbody rb = collision.rigidbody;
         // Doble check por si es hijo de un objeto más grande
@@ -34,8 +40,7 @@ public class DestructibleObject : MonoBehaviour
         {
             if (rb.isKinematic || rb.velocity.magnitude * rb.mass >= resistance)
             {
-                gameObject.SetActive(false);
-                destroyedVersion.SetActive(true);
+                DestroyObject();
                 //
                 if (destructionClip)
                 {
@@ -50,14 +55,27 @@ public class DestructibleObject : MonoBehaviour
     {
         if (force.magnitude >= resistance)
         {
-            gameObject.SetActive(false);
-            destroyedVersion.SetActive(true);
+            DestroyObject();
         }
     }
 
     public void DestroyObject()
     {
+        tutorialDestructibleObjective = gameObject.GetComponent<TutorialDestructibleObjective>();
+        Debug.Log(tutorialDestructibleObjective);
+        if (tutorialDestructibleObjective != null)
+        {
+            Debug.Log("Has componet");
+            TutorialManager.Instance.CheckAndNextPhase();
+        }
+        else
+        {
+            Debug.Log("Has not componet");
+        }
+
+        isDestroyed = true;
         gameObject.SetActive(false);
         destroyedVersion.SetActive(true);
+        
     }
 }

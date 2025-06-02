@@ -102,6 +102,8 @@ public class EnergyPulseAttack : MonoBehaviour
         }
         // Para elementos destruibles
         DestructibleObject destructibleObject = other.GetComponent<DestructibleObject>();
+        if(!destructibleObject) 
+            destructibleObject = other.GetComponentInParent<DestructibleObject>();
         if (destructibleObject)
         {
             destructibleObject.ApplyForce(direction.normalized * Mathf.Lerp(startingForce, finalForce, (float)currentStep / (float)stepsDuration));

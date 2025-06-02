@@ -25,7 +25,7 @@ public class TutorialObjective : MonoBehaviour
         if (!activated)
         {
             TutorialManager.Instance.CheckAndNextPhase();
-            materialDissolver.StartDissolution(-1);
+            materialDissolver.StartTransition(1);
             activated = true;
         }        
     }
