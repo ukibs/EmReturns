@@ -12,6 +12,7 @@ public class EnemyExplosionOnDeath : MonoBehaviour
 
     //
     private SphereCollider sphereCollider;
+    private BoxCollider boxCollider;
     private Rigidbody rb;
     private bool exploding = false;
     private float currentExplosionDuration = 0;
@@ -21,6 +22,7 @@ public class EnemyExplosionOnDeath : MonoBehaviour
     void Start()
     {
         sphereCollider = GetComponent<SphereCollider>();
+        boxCollider = GetComponent<BoxCollider>();
         rb = GetComponent<Rigidbody>();  
         enemyHealth = GetComponent<EnemyHealth>();
     }
@@ -62,7 +64,16 @@ public class EnemyExplosionOnDeath : MonoBehaviour
         exploding = true;
         rb.velocity = Vector3.zero;
         rb.isKinematic = true;
-        sphereCollider.isTrigger = true;
+
+        if(sphereCollider != null)
+        {
+            sphereCollider.isTrigger = true;
+        }
+
+        if(boxCollider != null)
+        {
+            boxCollider.isTrigger = true;
+        }
     }
 
     void ApplyPower(Collider other)
@@ -77,7 +88,7 @@ public class EnemyExplosionOnDeath : MonoBehaviour
         EM_PlayerController playerController = other.GetComponent<EM_PlayerController>();
         if (playerController)
         {
-            playerController.ApplyDamage((int)explosionForce);
+            playerController.ApplyDamage((int)explosionForce, true);
         }
         //
         Rigidbody rb = other.GetComponent<Rigidbody>();

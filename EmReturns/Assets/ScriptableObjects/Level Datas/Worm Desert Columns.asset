@@ -16,3 +16,4 @@ MonoBehaviour:
   useTerrain: 1
   enemyToSpawn: {fileID: 6028016815351250566, guid: 1cf7741d32bb4f54dadf3faf83214fa0, type: 3}
   skyboxMaterial: {fileID: 0}
+  musicClip: {fileID: 8300000, guid: 7b697c9b1cfe41d4dbf90f71c769a47b, type: 3}

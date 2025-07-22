@@ -313,6 +313,7 @@ public class Boss1Controller : MonoBehaviour
         //
         if (!aggresive)
         {
+            LevelManager.Instance.StartTimedFight();
             aggresive = true;
             faceMeshRenderer.material = angryFaceMaterial;
             AudioManager.Instance.PlayMusic(combatMusic[0], 0.3f, true);
@@ -458,6 +459,7 @@ public class Boss1Controller : MonoBehaviour
         //
         dead = true;
         //
+        LevelManager.Instance.EndTimedFight();
         LevelManager.Instance.EndLevel(true);
     }
 }

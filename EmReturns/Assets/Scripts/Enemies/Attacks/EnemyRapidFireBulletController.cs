@@ -47,9 +47,10 @@ public class EnemyRapidFireBulletController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        //Debug.Log("Collision with: " + collision.collider);
         //
         ContactPoint contactPoint = collision.GetContact(0);
-        GameObject impactParticles = Instantiate(impactParticlesPrefab, transform.position, Quaternion.LookRotation(contactPoint.normal));
+        GameObject impactParticles = Instantiate(impactParticlesPrefab, contactPoint.point, Quaternion.LookRotation(contactPoint.normal));
         //Debug.Log(impactParticles);
         //Debug.Log("Collission with: " + collision.gameObject.name);
         //
@@ -64,10 +65,11 @@ public class EnemyRapidFireBulletController : MonoBehaviour
         //if (boss1EnergyBall != null)
         //    boss1EnergyBall.OnCollisionEnter(collision);
         //
-        EM_PlayerController em_PlayerController = collision.collider.GetComponent<EM_PlayerController>();
-        if(em_PlayerController != null)
+        EM_PlayerController em_PlayerController = collision.collider.gameObject.GetComponent<EM_PlayerController>();
+        Debug.Log("EM Player controller: ", em_PlayerController);
+        if(em_PlayerController)
         {
-            em_PlayerController.ApplyDamage(10);
+            em_PlayerController.ApplyDamage(50, false);
         }
         //
         Destroy(gameObject);

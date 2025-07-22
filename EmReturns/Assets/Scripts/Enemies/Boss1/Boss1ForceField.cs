@@ -69,7 +69,7 @@ public class Boss1ForceField : MonoBehaviour
         EM_PlayerController playerController = other.GetComponent<EM_PlayerController>();
         if (playerController)
         {
-            playerController.ApplyDamage((int) shieldForce);
+            playerController.ApplyDamage((int) shieldForce, true);
         }
         //
         Rigidbody rb = other.GetComponent<Rigidbody>();

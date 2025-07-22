@@ -125,7 +125,7 @@ public class Boss1EnergyBall : MonoBehaviour
         EM_PlayerController playerController = other.GetComponent<EM_PlayerController>();
         if (playerController)
         {
-            playerController.ApplyDamage((int)explosionForce);
+            playerController.ApplyDamage((int)explosionForce, true);
         }
         //
         Rigidbody rb = other.GetComponent<Rigidbody>();

@@ -38,7 +38,7 @@ public class Boss1MegaLazerSegment : MonoBehaviour
         EM_PlayerController playerController = other.GetComponent<EM_PlayerController>();
         if (playerController)
         {
-            playerController.ApplyDamage(damage);
+            playerController.ApplyDamage(damage, true);
         }
         //
         Rigidbody rb = other.GetComponent<Rigidbody>();

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class TutorialManager : MonoBehaviour
     //public Transform[] tutorialStepsObjects;
     public AudioClip[] emSounds;
     public TMP_Text tutorialText;
+    public GameObject instructionsPanel;
 
     private static TutorialManager instance;
     private TutorialStep[] tutorialSteps;
@@ -32,12 +34,32 @@ public class TutorialManager : MonoBehaviour
         {
             tutorialSteps[i].gameObject.SetActive(false);
         }
+
+        //
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //
+        if (InputController.Instance.PausePressed)
+        {
+            if (currentStep >= tutorialSteps.Length - 1)
+            {
+                SceneManager.LoadScene(0);
+            }
+            else
+            {
+                instructionsPanel.SetActive(!instructionsPanel.activeSelf);
+            }
+        }
+        //
+        if (InputController.Instance.ExitPressed && instructionsPanel.activeSelf)
+        {
+            SceneManager.LoadScene(0);
+        }
     }
 
     public void CheckAndNextPhase()

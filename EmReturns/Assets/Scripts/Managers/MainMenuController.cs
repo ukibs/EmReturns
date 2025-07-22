@@ -12,6 +12,9 @@ public class MainMenuController : MonoBehaviour
     public VideoPlayer videoPlayer;
     public VideoClip[] clips;
     public bool randomOrder;
+    [Header("Components")]
+    public GameObject titleMenu;
+    public GameObject levelSelector;
 
     //
     private int currentClipIndex = 0;
@@ -23,7 +26,10 @@ public class MainMenuController : MonoBehaviour
     void Start()
     {
         //
-        if(clips.Length > 0)
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        //
+        if (clips.Length > 0)
             StartCoroutine(WaitAndCheck());
     }
 
@@ -39,7 +45,9 @@ public class MainMenuController : MonoBehaviour
             //
             if (gamepad.startButton.wasPressedThisFrame)
             {
-                SceneManager.LoadScene(1);
+                // SceneManager.LoadScene(1);
+                titleMenu.SetActive(false);
+                levelSelector.SetActive(true);
             }
             if (gamepad.selectButton.wasPressedThisFrame)
             {
@@ -50,9 +58,11 @@ public class MainMenuController : MonoBehaviour
         if(keyboard != null)
         {
             //
-            if (keyboard.enterKey.wasPressedThisFrame)
+            if (keyboard.enterKey.wasPressedThisFrame || Mouse.current.leftButton.IsPressed())
             {
-                SceneManager.LoadScene(1);
+                // SceneManager.LoadScene(1);
+                titleMenu.SetActive(false);
+                levelSelector.SetActive(true);
             }
             if (keyboard.escapeKey.wasPressedThisFrame)
             {
@@ -89,5 +99,21 @@ public class MainMenuController : MonoBehaviour
         checkVideo = false;
         yield return new WaitForSeconds(1);
         checkVideo = true;
+    }
+
+    public void OpenScene(int sceneIndex)
+    {
+        SceneManager.LoadScene(sceneIndex);
+    }
+
+    public void OpenLevel(int levelIndex)
+    {
+        GameManager.Instance.SetLevel(levelIndex);
+        SceneManager.LoadScene("MainScene");
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }

@@ -62,16 +62,16 @@ public class DestructibleObject : MonoBehaviour
     public void DestroyObject()
     {
         tutorialDestructibleObjective = gameObject.GetComponent<TutorialDestructibleObjective>();
-        Debug.Log(tutorialDestructibleObjective);
+        //Debug.Log(tutorialDestructibleObjective);
         if (tutorialDestructibleObjective != null)
         {
             Debug.Log("Has componet");
             TutorialManager.Instance.CheckAndNextPhase();
         }
-        else
-        {
-            Debug.Log("Has not componet");
-        }
+        //else
+        //{
+        //    Debug.Log("Has not componet");
+        //}
 
         isDestroyed = true;
         gameObject.SetActive(false);

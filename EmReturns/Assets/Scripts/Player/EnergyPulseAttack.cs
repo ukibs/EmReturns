@@ -123,6 +123,12 @@ public class EnergyPulseAttack : MonoBehaviour
             boss1Controller.SufferDamage(Time.deltaTime * 1);
             return;
         }
+        //
+        EnemyHealth enemyHealth = other.GetComponentInParent<EnemyHealth>();
+        if (enemyHealth)
+        {
+            enemyHealth.SufferDamage((int)Mathf.Lerp(startingForce, finalForce, (float)currentStep / (float)stepsDuration));
+        }
         // Chequeo extra - Si no es ninguna de las anteriores, le metemos para que pueda dañar al boss
         if (rb)
         {

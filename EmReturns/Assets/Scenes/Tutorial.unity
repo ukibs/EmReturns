@@ -733,7 +733,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 604c0440054c4a346bf050b97fcf2c3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: Press E/R2 for charged shot
+  text: Press Mouse Left/R2 for charged shot
   objectiveNumber: 4
 --- !u!114 &222253947 stripped
 MonoBehaviour:
@@ -2743,6 +2743,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 59f085403b1ab2345b19f0bc332d0422, type: 3}
   - {fileID: 8300000, guid: 7521f02a1cfee2340b064390fddac832, type: 3}
   tutorialText: {fileID: 1287820072}
+  instructionsPanel: {fileID: 1452383906}
 --- !u!4 &946206622
 Transform:
   m_ObjectHideFlags: 0
@@ -4517,6 +4518,11 @@ PrefabInstance:
 --- !u!224 &1452383905 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5730020766869806445, guid: 4598d36c7fa468545a5781044426bc5e, type: 3}
+  m_PrefabInstance: {fileID: 1452383904}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1452383906 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5730020766670140809, guid: 4598d36c7fa468545a5781044426bc5e, type: 3}
   m_PrefabInstance: {fileID: 1452383904}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &1557759009 stripped

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,4 +10,13 @@ public class LevelDataSO : ScriptableObject
     public bool useTerrain;
     public GameObject enemyToSpawn;
     public Material skyboxMaterial;
+    public AudioClip musicClip;
+    public EnemyWave[] enemyWaves;
+}
+
+[Serializable]
+public class EnemyWave
+{
+    public GameObject enemyPrefab;
+    public int amount;
 }

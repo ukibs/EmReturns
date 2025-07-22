@@ -31,6 +31,7 @@ public class EnemyHealth : MonoBehaviour
 
     public void SufferDamage(int damage)
     {
+        if(isDead) return;
         //
         currentHealth -= damage;
         if (currentHealth <= 0)
@@ -44,7 +45,8 @@ public class EnemyHealth : MonoBehaviour
 
             //
             isDead = true;
-            
+
+            LevelManager.Instance.EnemyDefeated();
         }
         else
         {

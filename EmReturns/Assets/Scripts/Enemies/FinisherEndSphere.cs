@@ -48,7 +48,7 @@ public class FinisherEndSphere : MonoBehaviour
         EM_PlayerController playerController = other.GetComponent<EM_PlayerController>();
         if (playerController)
         {
-            playerController.ApplyDamage(0);
+            playerController.ApplyDamage(0, true);
         }
         //
         Rigidbody rb = other.GetComponent<Rigidbody>();

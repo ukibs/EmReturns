@@ -459,7 +459,15 @@ public class EM_PlayerController : MonoBehaviour
             {
                 //currentObjective = FindObjectOfType<Objective>().transform;
                 //currentObjective = cameraController.GetNearestObjectiveToScreenCenter<LockableObjective>(shovelController.hookedRb);
-                currentObjective = cameraController.GetNearestBossSectionToScreenCenter();
+                Boss1Controller boss1Controller = FindObjectOfType<Boss1Controller>();
+                if (boss1Controller != null)
+                {
+                    currentObjective = cameraController.GetNearestBossSectionToScreenCenter();
+                }
+                else
+                {
+                    currentObjective = cameraController.GetNearestObjectiveToScreenCenter<Enemy>(shovelController.hookedRb);
+                }
             }            
         }
     }
@@ -603,10 +611,10 @@ public class EM_PlayerController : MonoBehaviour
         }        
     }
 
-    public void ApplyDamage(int damage)
+    public void ApplyDamage(int damage, bool causesKnockback)
     {
         //
-        //Debug.Log("Damaging player");
+        Debug.Log("Damaging player");
         if (currentInvulnerabilityDuration <= invulnerabilityDuration)
         {
             return;
@@ -614,8 +622,11 @@ public class EM_PlayerController : MonoBehaviour
         //
         if (!ragdolled)
         {
-            GetRagdolled();
-            shovelController.ReturnShovelsToIdle();
+            if (causesKnockback)
+            {
+                GetRagdolled();
+                shovelController.ReturnShovelsToIdle();
+            }            
             AudioManager.Instance.Play3dFx(transform.position, damageClip, 0.5f);
             EM_VoiceController.Instance.PlayVoiceGroup("damage");
             //
