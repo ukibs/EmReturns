@@ -316,7 +316,7 @@ public class Boss1Controller : MonoBehaviour
             LevelManager.Instance.StartTimedFight();
             aggresive = true;
             faceMeshRenderer.material = angryFaceMaterial;
-            AudioManager.Instance.PlayMusic(combatMusic[0], 0.3f, true);
+            AudioManager.Instance.PlayMusic(combatMusic[0], 0.7f, true);
             GoToNextBehaviour();
         }
         //

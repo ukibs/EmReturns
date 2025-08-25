@@ -790,11 +790,11 @@ MonoBehaviour:
   energyShieldPreparation: 2
   energyShieldDuration: 5
   combatMusic:
-  - {fileID: 8300000, guid: e993c06cb0c66e241bfdc5a01a7aaff3, type: 3}
-  - {fileID: 8300000, guid: ba7fbdb93f00e844c8933f75580bc71e, type: 3}
-  - {fileID: 8300000, guid: 8cf78e431ba3d0b4eb7e7fd02fae4517, type: 3}
+  - {fileID: 8300000, guid: 44fe3f0299f7b48478390c4d7b17cae4, type: 3}
+  - {fileID: 8300000, guid: c0e46d9b3c528514e9b39a480e6074ce, type: 3}
+  - {fileID: 8300000, guid: 395057b7be8a9854b879cad2d585a8c2, type: 3}
   combatMusicVolumes:
-  - 0.3
+  - 0.8
   - 0.8
   - 0.8
   bossPhases:
