@@ -28,6 +28,7 @@ public class EM_PlayerController : MonoBehaviour
     public Image shieldBarFront;
     public Image finisherBarBack;
     public Image finisherBarFront;
+    public TMP_Text finisherText;
     public Image recoverBar;
     public GameObject recoverLetter;
     public GameObject[] healthIcons;
@@ -76,6 +77,7 @@ public class EM_PlayerController : MonoBehaviour
     public static EM_PlayerController Instance { get { return instance; } }
     public bool Ragdolled { get { return ragdolled; } }
     public Rigidbody Rb { get { return rb; } }
+    public float CurrentFinisherEnergy { get { return currentFinisherEnergy; } }
     public bool FinisherLockAndLoaded
     {
         get
@@ -249,6 +251,9 @@ public class EM_PlayerController : MonoBehaviour
         currentShieldBarFilled += Mathf.Sign(currentShield - currentShieldBarFilled) * (maxShields/6f) * dt;
         currentFinisherEnergyFilled += Mathf.Sign(currentFinisherEnergy - currentFinisherEnergyFilled) * 3.5f * dt;
 
+        //
+        finisherText.text = currentFinisherEnergy + "";
+
         // Shield bars
         if (shieldBarBack)
         {
@@ -261,11 +266,13 @@ public class EM_PlayerController : MonoBehaviour
         // Finisher bars
         if (finisherBarBack)
         {
-            finisherBarBack.fillAmount = (currentFinisherEnergyFilled > currentFinisherEnergy) ? currentFinisherEnergyFilled / 100f : currentFinisherEnergy / 100f;
+            // finisherBarBack.fillAmount = (currentFinisherEnergyFilled > currentFinisherEnergy) ? currentFinisherEnergyFilled / 100f : currentFinisherEnergy / 100f;
+            finisherBarBack.fillAmount = currentFinisherEnergy / 100f;
         }        
         if (finisherBarFront)
         {
-            finisherBarFront.fillAmount = (currentFinisherEnergyFilled <= currentFinisherEnergy) ? currentFinisherEnergyFilled / 100f : currentFinisherEnergy / 100f;
+            //  finisherBarFront.fillAmount = (currentFinisherEnergyFilled <= currentFinisherEnergy) ? currentFinisherEnergyFilled / 100f : currentFinisherEnergy / 100f;
+            finisherBarFront.fillAmount = currentFinisherEnergy / 100f;
         }        
     }
 
@@ -750,7 +757,8 @@ public class EM_PlayerController : MonoBehaviour
             // TODO: Activar modo finisher
             AudioManager.Instance.Play2dFx(transform.position, finisherLoadCompletedClip, 1f);
             finisherActive = true;
-            finisherBarAnimator.SetBool("Full", true);
+            // finisherBarAnimator.SetBool("Full", true);
+            finisherBarAnimator.SetBool("Active", true);
             // Extra para fijar al boss
             currentObjective = null;
             objectiveMarker.gameObject.SetActive(true);
@@ -790,7 +798,8 @@ public class EM_PlayerController : MonoBehaviour
                 //
                 currentFinisherEnergy = 0;
                 finisherActive = false;
-                finisherBarAnimator.SetBool("Full", false);
+                //finisherBarAnimator.SetBool("Full", false);
+                finisherBarAnimator.SetBool("Active", false);
             }
         }            
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -15,6 +16,7 @@ public class MainMenuController : MonoBehaviour
     [Header("Components")]
     public GameObject titleMenu;
     public GameObject levelSelector;
+    public TMP_Text[] bestTimesTexts;
 
     //
     private int currentClipIndex = 0;
@@ -31,6 +33,8 @@ public class MainMenuController : MonoBehaviour
         //
         if (clips.Length > 0)
             StartCoroutine(WaitAndCheck());
+        //
+        SetBestTimes();
     }
 
     // Update is called once per frame
@@ -92,6 +96,12 @@ public class MainMenuController : MonoBehaviour
             //
             Debug.Log("Setting video - " + currentClipIndex);
         }
+        //
+        if (Keyboard.current.pKey.wasPressedThisFrame)
+        {
+            PlayerPrefs.SetString("HighScores", "");
+            Debug.Log("Scores deleted");
+        }
     }
 
     IEnumerator WaitAndCheck()
@@ -115,5 +125,33 @@ public class MainMenuController : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    void SetBestTimes()
+    {
+        // Ge the existant scores
+        string scoresTextRaw = PlayerPrefs.GetString("HighScores", "");
+        //Debug.Log(scoresTextRaw);
+        string[] scores = scoresTextRaw.Split(';');
+        //Debug.Log("Scores length: " + scores.Length);
+        List<Score> scoreList = new List<Score>();
+        // Check that it is not empty
+        if (scores[0] != "")
+        {
+            for (int i = 0; i < scores.Length && i < bestTimesTexts.Length; i++)
+            {
+                //Debug.Log("Score " + i + ": " + scores[i]);
+                string[] scoreDisected = scores[i].Split('-');
+                //Debug.Log("Score dissected: " + scoreDisected);
+                Score score = new Score(scoreDisected[0], float.Parse(scoreDisected[1]));
+
+                int minutes = Mathf.FloorToInt(score.value / 60f);
+                int seconds = Mathf.FloorToInt(score.value % 60f);
+                int hundredths = Mathf.FloorToInt((score.value * 100f) % 100f);
+                string timeFormatted = string.Format("{0:00}:{1:00}.{2:00}", minutes, seconds, hundredths);
+
+                bestTimesTexts[i].text = (i + 1) + " - " + score.letters + " - " + timeFormatted;
+            }
+        }
     }
 }

@@ -29,7 +29,7 @@ public class DestructibleObject : MonoBehaviour
 
     public void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.collider);
+        //Debug.Log(collision.collider);
         //Rigidbody rb = collision.collider.GetComponent<Rigidbody>();
         Rigidbody rb = collision.rigidbody;
         // Doble check por si es hijo de un objeto más grande

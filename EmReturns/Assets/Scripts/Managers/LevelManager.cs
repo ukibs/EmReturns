@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -16,12 +17,16 @@ public class LevelManager : MonoBehaviour
     public GameObject terrainGenerator;
     public LevelDataSO levelDataSO;
     public EnemySpawner enemySpawner;
+    public ScorePanelController scorePanelController;
 
     //
     public GameObject enemyWavesPanel;
     public TMP_Text waveText;
     public TMP_Text remainigEnemiesText;
+    public GameObject timerGroup;
     public TMP_Text timerText;
+    public GameObject scorePanel;
+    public TMP_Text scorePanelTimerText;
 
     //
     private static LevelManager instance;
@@ -72,8 +77,12 @@ public class LevelManager : MonoBehaviour
         //
         if (InputController.Instance.PausePressed)
         {
-            if (endPanel.activeSelf)
+            if (endPanel.activeSelf || scorePanel.activeSelf)
             {
+                // Save score
+                SaveScore();
+
+                // Go out
                 SceneManager.LoadScene(0);
             }
             else
@@ -100,7 +109,10 @@ public class LevelManager : MonoBehaviour
     //
     public void EndLevel(bool victory)
     {
-        endPanel.SetActive(true);
+        if(fightEndTime == 0)
+        {
+            endPanel.SetActive(true);
+        }        
         SetEndMusic(victory);
         string message = victory ? "VICTORY" : "DEFEAT";
         SetEndMessage(message);
@@ -143,7 +155,7 @@ public class LevelManager : MonoBehaviour
     public void StartTimedFight()
     {
         fightStartTime = Time.time;
-        timerText.gameObject.SetActive(true);
+        timerGroup.SetActive(true);
     }
 
     public void EndTimedFight()
@@ -155,5 +167,55 @@ public class LevelManager : MonoBehaviour
         int seconds = Mathf.FloorToInt(totalFightTime % 60f);
         int hundredths = Mathf.FloorToInt((totalFightTime * 100f) % 100f);
         timerText.text = string.Format("{0:00}:{1:00}.{2:00}", minutes, seconds, hundredths);
+
+        scorePanel.SetActive(true);
+        scorePanelTimerText.text = string.Format("{0:00}:{1:00}.{2:00}", minutes, seconds, hundredths);
+    }
+
+    void SaveScore()
+    {
+        // Ge the existant scores
+        string scoresTextRaw = PlayerPrefs.GetString("HighScores", "");
+        string[] scores = scoresTextRaw.Split(';');
+        //Debug.Log("Scores length: " + scores.Length);
+        List<Score> scoreList = new List<Score>();
+        // Check that it is not empty
+        if (scores[0] != "")
+        {
+            for (int i = 0; i < scores.Length; i++)
+            {
+                //Debug.Log("Score " + i + ": " + scores[i]);
+                string[] scoreDisected = scores[i].Split('-');
+                //Debug.Log("Score dissected: " + scoreDisected);
+                Score score = new Score(scoreDisected[0], float.Parse(scoreDisected[1]));
+                scoreList.Add(score);
+            }
+        }        
+        // Add the new one
+        float totalFightTime = fightEndTime - fightStartTime;
+        Score newScore = new Score(scorePanelController.Initials, totalFightTime);
+        scoreList.Add(newScore);
+        // Order them
+        scoreList = scoreList.OrderBy(s => s.value).ToList();
+        // Save them
+        string scoreListString = string.Join(";", scoreList.Select(s => s.GetString()));
+        PlayerPrefs.SetString("HighScores", scoreListString);
+    }
+}
+
+public class Score
+{
+    public string letters;
+    public float value;
+
+    public Score(string letters, float value)
+    {
+        this.letters = letters;
+        this.value = value;
+    }
+
+    public string GetString()
+    {
+        return letters + "-" + value;
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 
 public class Boss1Controller : MonoBehaviour
@@ -33,6 +34,7 @@ public class Boss1Controller : MonoBehaviour
     public float energyBallCooldown = 5;
     public float energyShieldPreparation = 2;
     public float energyShieldDuration = 5;
+    public int maxHealth = 200;
     [Header("Behaviours")]
     public AudioClip[] combatMusic;
     public float[] combatMusicVolumes;
@@ -49,6 +51,9 @@ public class Boss1Controller : MonoBehaviour
     public AudioClip loadingLazerClip;
     public AudioClip shootingLazerClip;
     public AudioClip headHitEffect;
+    [Header("HUD")]
+    public GameObject bossHealthZone;
+    public Image healthImagePrefab;
 
     //
     private Boss1SegmentController[] segmentControllers;
@@ -74,6 +79,8 @@ public class Boss1Controller : MonoBehaviour
     private float currentStunnedTime = 0;
     //
     private bool dead = false;
+    private Image[] healthImages;
+    private int currentHealth = 0;
 
     //
     public float MovementSpeed { get { return bossPhases[currentPhase].behaviours[currentBehaviourIndex].movementSpeed; } }
@@ -86,6 +93,7 @@ public class Boss1Controller : MonoBehaviour
         //
         SpawnSegments();
         //rb.velocity = Vector3.forward * movementSpeed;
+        InitializeHealthBars();
     }
 
     // Update is called once per frame
@@ -116,6 +124,18 @@ public class Boss1Controller : MonoBehaviour
             if (aggresive)
             {
                 UpdateDefensiveShield(dt);
+            }
+            //
+            if (Keyboard.current.pKey.wasPressedThisFrame)
+            {
+                if (aggresive)
+                {
+                    EndPhase();
+                }
+                else
+                {
+                    OnDamagedSegment();
+                }
             }
         }        
     }
@@ -316,11 +336,15 @@ public class Boss1Controller : MonoBehaviour
             LevelManager.Instance.StartTimedFight();
             aggresive = true;
             faceMeshRenderer.material = angryFaceMaterial;
-            AudioManager.Instance.PlayMusic(combatMusic[0], 0.7f, true);
+            AudioManager.Instance.PlayMusic(combatMusic[0], combatMusicVolumes[0], true);
             GoToNextBehaviour();
         }
         //
         //currentBehaviourIndex = 2;
+        
+        currentHealth -= 10;
+        Debug.Log("On damaged segment, current health: " + currentHealth);
+        UpdateHealthBar();
     }
 
     public void AskShieldActivation()
@@ -387,9 +411,15 @@ public class Boss1Controller : MonoBehaviour
         }
         else
         {
+            // Bajamos bien la barra de vida
+            currentHealth = 0;
+            UpdateHealthBar();
+            currentHealth = maxHealth;
+
             // Siguiente fase
             currentPhase++;
             currentBehaviourIndex = 0;
+
             ResetSegments();
             StartCoroutine(WaitAndActivateFloatingBodies());
             //AudioManager.Instance.Play2dFx(endPhaseExplosion.transform.position, endPhaseExplosion)
@@ -412,6 +442,11 @@ public class Boss1Controller : MonoBehaviour
         //Debug.Log("Adding " + stunnedTimeToAdd + " stunned time - Current stunned time: " + currentStunnedTime);
 
         AudioManager.Instance.Play3dFx(transform.position, headHitEffect, 1);
+        
+        if(EM_PlayerController.Instance.FinisherLockAndLoaded)
+            currentHealth = (int)EM_PlayerController.Instance.CurrentFinisherEnergy;
+        
+        UpdateHealthBar();
     }
 
     bool AllSegmentsDamaged()
@@ -461,6 +496,38 @@ public class Boss1Controller : MonoBehaviour
         //
         LevelManager.Instance.EndTimedFight();
         LevelManager.Instance.EndLevel(true);
+    }
+
+    void InitializeHealthBars()
+    {
+        currentHealth = maxHealth;
+        bossHealthZone = GameObject.Find("Boss Health Zone");
+        healthImagePrefab = GameObject.Find("Healthbar Front").GetComponent<Image>();
+        healthImages = new Image[bossPhases.Length];
+        for(int i = healthImages.Length - 1; i >= 0; i--)
+        {
+            healthImages[i] = Instantiate(healthImagePrefab, bossHealthZone.transform).GetComponent<Image>();
+            switch (i)
+            {
+                case 0:
+                    healthImages[i].color = Color.green;
+                    break;
+                case 1:
+                    healthImages[i].color = Color.yellow;
+                    break;
+                case 2:
+                    healthImages[i].color = Color.red;
+                    break;
+            }
+            
+        }
+        healthImagePrefab.gameObject.SetActive(false);
+        bossHealthZone.SetActive(true);
+    }
+
+    void UpdateHealthBar()
+    {
+        healthImages[currentPhase].fillAmount = (float)currentHealth / (float)maxHealth;
     }
 }
 
