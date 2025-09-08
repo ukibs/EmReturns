@@ -7,7 +7,7 @@ public class EM_MaterialController : MonoBehaviour
 {
     public FlexibleColorPicker bodyFCP;
     public FlexibleColorPicker bodyEmissionFCP;
-    public FlexibleColorPicker faceFCP;
+    //public FlexibleColorPicker faceFCP;
     public FlexibleColorPicker faceEmissionFCP;
 
     public MeshRenderer[] bodyMeshRenderers;
@@ -15,6 +15,8 @@ public class EM_MaterialController : MonoBehaviour
 
     public Material bodyMaterial;
     public Material faceMaterial;
+
+    public Animator emAnimator;
 
     private float intensity = 5f;
 
@@ -32,10 +34,10 @@ public class EM_MaterialController : MonoBehaviour
             bodyEmissionFCP.color = bodyMeshRenderers[i].material.GetColor("_EmissionColor") / intensity;
         }
 
-        for (int i = 0; i < faceMeshRenderers.Length; i++)
-        {
-            faceFCP.color = faceMeshRenderers[i].material.color;
-        }
+        //for (int i = 0; i < faceMeshRenderers.Length; i++)
+        //{
+        //    faceFCP.color = faceMeshRenderers[i].material.color;
+        //}
 
         for (int i = 0; i < faceMeshRenderers.Length; i++)
         {
@@ -61,7 +63,8 @@ public class EM_MaterialController : MonoBehaviour
 
         for (int i = 0; i < faceMeshRenderers.Length; i++)
         {
-            faceMeshRenderers[i].material.color = faceFCP.color;
+            // faceMeshRenderers[i].material.color = faceFCP.color;
+            faceMeshRenderers[i].material.color = faceEmissionFCP.color;
         }
 
         for (int i = 0; i < faceMeshRenderers.Length; i++)
@@ -77,13 +80,27 @@ public class EM_MaterialController : MonoBehaviour
     {
         bodyMaterial.color = bodyFCP.color;
         bodyMaterial.SetColor("_EmissionColor", bodyEmissionFCP.color * intensity);
-        faceMaterial.color = faceFCP.color;
+        //faceMaterial.color = faceFCP.color;
         faceMaterial.SetColor("_EmissionColor", faceEmissionFCP.color);
-        SceneManager.LoadScene(0);
+        //SceneManager.LoadScene(1);
+        StartCoroutine(WaitAndReturn());
     }
 
     public void CancelAndReturn()
     {
-        SceneManager.LoadScene(0);
+        //SceneManager.LoadScene(1);
+        StartCoroutine(WaitAndReturn());
+    }
+
+    IEnumerator WaitAndReturn()
+    {
+        emAnimator.SetTrigger("Color Saved");
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene(1);
+    }
+
+    public void ColorChanged()
+    {
+        emAnimator.SetTrigger("Color Changed");
     }
 }
