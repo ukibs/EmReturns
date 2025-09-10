@@ -113,13 +113,15 @@ public class MainMenuController : MonoBehaviour
 
     public void OpenScene(int sceneIndex)
     {
-        SceneManager.LoadScene(sceneIndex);
+        //SceneManager.LoadScene(sceneIndex);
+        ImageFadeController.Instance.FadeAndGoToScene(sceneIndex);
     }
 
     public void OpenLevel(int levelIndex)
     {
-        GameManager.Instance.SetLevel(levelIndex);
-        SceneManager.LoadScene("MainScene");
+        //GameManager.Instance.SetLevel(levelIndex);
+        //SceneManager.LoadScene("MainScene");
+        ImageFadeController.Instance.FadeAndGoToLevel(levelIndex);
     }
 
     public void QuitGame()

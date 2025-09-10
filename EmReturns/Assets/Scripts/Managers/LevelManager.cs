@@ -83,7 +83,8 @@ public class LevelManager : MonoBehaviour
                 SaveScore();
 
                 // Go out
-                SceneManager.LoadScene(0);
+                //SceneManager.LoadScene(1);
+                ImageFadeController.Instance.FadeAndGoToScene(1);
             }
             else
             {
@@ -93,7 +94,8 @@ public class LevelManager : MonoBehaviour
         //
         if(InputController.Instance.ExitPressed && instructionsPanel.activeSelf)
         {
-            SceneManager.LoadScene(0);
+            //SceneManager.LoadScene(1);
+            ImageFadeController.Instance.FadeAndGoToScene(1);
         }
         //
         if (timerText.gameObject.activeSelf && fightEndTime == 0)

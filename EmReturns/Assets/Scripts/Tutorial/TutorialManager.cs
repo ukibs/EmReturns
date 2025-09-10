@@ -48,7 +48,8 @@ public class TutorialManager : MonoBehaviour
         {
             if (currentStep >= tutorialSteps.Length - 1)
             {
-                SceneManager.LoadScene(0);
+                //SceneManager.LoadScene(0);
+                ImageFadeController.Instance.FadeAndGoToScene(1);
             }
             else
             {
@@ -58,7 +59,8 @@ public class TutorialManager : MonoBehaviour
         //
         if (InputController.Instance.ExitPressed && instructionsPanel.activeSelf)
         {
-            SceneManager.LoadScene(0);
+            //SceneManager.LoadScene(0);
+            ImageFadeController.Instance.FadeAndGoToScene(1);
         }
     }
 

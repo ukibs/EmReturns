@@ -96,7 +96,8 @@ public class EM_MaterialController : MonoBehaviour
     {
         emAnimator.SetTrigger("Color Saved");
         yield return new WaitForSeconds(1);
-        SceneManager.LoadScene(1);
+        //SceneManager.LoadScene(1);
+        ImageFadeController.Instance.FadeAndGoToScene(1);
     }
 
     public void ColorChanged()
