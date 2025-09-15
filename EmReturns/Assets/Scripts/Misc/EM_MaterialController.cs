@@ -109,7 +109,7 @@ public class EM_MaterialController : MonoBehaviour
     {
         // Colores default
         Color bodyDefault = new Color32(0xED, 0xED, 0xED, 0xFF); // #EDEDED
-        Color lightsDefault = new Color32(0x0F, 0xC4, 0xB1, 0xFF); // #0FB1FF
+        Color lightsDefault = new Color32(0x00, 0xAC, 0xFF, 0xFF); // #00ACFF
         Color faceDefault = new Color32(0x86, 0xFF, 0x00, 0xFF); // #86FF00
 
         // Asignar a body

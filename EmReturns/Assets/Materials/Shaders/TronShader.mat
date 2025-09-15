@@ -90,28 +90,33 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _GridSpacing: 0.98
-    - _LineThickness: 0.039
+    - _GridSpacing: 0.15
+    - _LineThickness: 0.001
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _ScrollSpeed: 0.15
+    - _ScrollSpeed: 0.02
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Surface: 0
-    - _UVScale: 6
+    - _Tilt: 0
+    - _UVScale: 0.92
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
+    - _BackgroundBottom: {r: 0.17254902, g: 0.28235295, b: 0.5294118, a: 1}
     - _BackgroundColor: {r: 0.11587752, g: 0.14844447, b: 0.26415092, a: 0}
+    - _BackgroundTop: {r: 0.705283, g: 0.6650944, b: 1, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _LineColor: {r: 0.11627802, g: 0.24187328, b: 0.3679245, a: 1}
+    - _LineBottom: {r: 0.13536847, g: 0.43439326, b: 0.735849, a: 1}
+    - _LineColor: {r: 0.048727296, g: 0.09511835, b: 0.14150941, a: 1}
+    - _LineTop: {r: 0.9405904, g: 0.7242346, b: 0.990566, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &240545583497301632
