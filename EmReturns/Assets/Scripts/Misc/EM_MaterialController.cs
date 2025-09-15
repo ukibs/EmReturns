@@ -104,4 +104,31 @@ public class EM_MaterialController : MonoBehaviour
     {
         emAnimator.SetTrigger("Color Changed");
     }
+
+    public void ResetColor()
+    {
+        // Colores default
+        Color bodyDefault = new Color32(0xED, 0xED, 0xED, 0xFF); // #EDEDED
+        Color lightsDefault = new Color32(0x0F, 0xC4, 0xB1, 0xFF); // #0FB1FF
+        Color faceDefault = new Color32(0x86, 0xFF, 0x00, 0xFF); // #86FF00
+
+        // Asignar a body
+        foreach (var renderer in bodyMeshRenderers)
+        {
+            renderer.material.color = bodyDefault;
+            renderer.material.SetColor("_EmissionColor", lightsDefault * intensity);
+        }
+
+        // Asignar a face
+        foreach (var renderer in faceMeshRenderers)
+        {
+            renderer.material.color = faceDefault;
+            renderer.material.SetColor("_EmissionColor", faceDefault);
+        }
+
+        // Actualizar ruedas de color
+        bodyFCP.color = bodyDefault;
+        bodyEmissionFCP.color = lightsDefault;
+        faceEmissionFCP.color = faceDefault;
+    }
 }
