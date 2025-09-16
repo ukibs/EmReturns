@@ -147,6 +147,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2024667432}
     - target: {fileID: 6244736362935794270, guid: 8d7135b273ee9b947b19874f580a7eda, type: 3}
+      propertyPath: finisherText
+      value: 
+      objectReference: {fileID: 423465967}
+    - target: {fileID: 6244736362935794270, guid: 8d7135b273ee9b947b19874f580a7eda, type: 3}
       propertyPath: hazardMarker
       value: 
       objectReference: {fileID: 604919939}
@@ -185,7 +189,7 @@ PrefabInstance:
     - target: {fileID: 6244736362935794270, guid: 8d7135b273ee9b947b19874f580a7eda, type: 3}
       propertyPath: finisherBarAnimator
       value: 
-      objectReference: {fileID: 1169289440}
+      objectReference: {fileID: 107185733}
     - target: {fileID: 6244736363206363753, guid: 8d7135b273ee9b947b19874f580a7eda, type: 3}
       propertyPath: m_Name
       value: EM
@@ -380,6 +384,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   text: Space/A for vertical impulse
   objectiveNumber: 2
+--- !u!95 &107185733 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 381796941, guid: 4598d36c7fa468545a5781044426bc5e, type: 3}
+  m_PrefabInstance: {fileID: 1452383904}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &122063650
 GameObject:
   m_ObjectHideFlags: 0
@@ -1066,11 +1075,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 310927944}
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: -960, y: -537, z: 0}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1209156508}
-  m_RootOrder: 1
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1001 &334882081
 PrefabInstance:
@@ -1079,6 +1088,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1699400018}
     m_Modifications:
+    - target: {fileID: 4541536004529259191, guid: 5bb728d1b49341f4cbd07fb7fb3f45f1, type: 3}
+      propertyPath: fireClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 83fa183ed88834a4d9f1377df4c925e5, type: 3}
     - target: {fileID: 5219488267639990752, guid: 5bb728d1b49341f4cbd07fb7fb3f45f1, type: 3}
       propertyPath: m_Name
       value: Tutorial Shooting Enemy Energy Ball
@@ -1356,6 +1369,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &423465967 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 281483860864739337, guid: 4598d36c7fa468545a5781044426bc5e, type: 3}
+  m_PrefabInstance: {fileID: 1452383904}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &425775796
 GameObject:
   m_ObjectHideFlags: 0
@@ -1471,6 +1495,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1699400018}
     m_Modifications:
+    - target: {fileID: 4541536004529259191, guid: 5bb728d1b49341f4cbd07fb7fb3f45f1, type: 3}
+      propertyPath: fireClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 83fa183ed88834a4d9f1377df4c925e5, type: 3}
     - target: {fileID: 5219488267639990752, guid: 5bb728d1b49341f4cbd07fb7fb3f45f1, type: 3}
       propertyPath: m_Name
       value: Tutorial Shooting Enemy Energy Ball
@@ -1809,6 +1837,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1699400018}
     m_Modifications:
+    - target: {fileID: 4541536004529259191, guid: 5bb728d1b49341f4cbd07fb7fb3f45f1, type: 3}
+      propertyPath: fireClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 83fa183ed88834a4d9f1377df4c925e5, type: 3}
     - target: {fileID: 5219488267639990752, guid: 5bb728d1b49341f4cbd07fb7fb3f45f1, type: 3}
       propertyPath: m_Name
       value: Tutorial Shooting Enemy Energy Ball
@@ -3188,11 +3220,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1134586362}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!95 &1169289440 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5730020767585535579, guid: 4598d36c7fa468545a5781044426bc5e, type: 3}
-  m_PrefabInstance: {fileID: 1452383904}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1169289441 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5730020767585535578, guid: 4598d36c7fa468545a5781044426bc5e, type: 3}
@@ -3372,7 +3399,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1287820071}
-  - {fileID: 310927946}
   m_Father: {fileID: 709809765}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3617,7 +3643,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 150}
+  m_AnchoredPosition: {x: 0, y: 287}
   m_SizeDelta: {x: 1000, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1287820072
@@ -5693,6 +5719,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1699400018}
     m_Modifications:
+    - target: {fileID: 4541536004529259191, guid: 5bb728d1b49341f4cbd07fb7fb3f45f1, type: 3}
+      propertyPath: fireClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 83fa183ed88834a4d9f1377df4c925e5, type: 3}
     - target: {fileID: 5219488267639990752, guid: 5bb728d1b49341f4cbd07fb7fb3f45f1, type: 3}
       propertyPath: m_Name
       value: Tutorial Shooting Enemy Energy Ball

@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
@@ -27,6 +28,8 @@ public class LevelManager : MonoBehaviour
     public TMP_Text timerText;
     public GameObject scorePanel;
     public TMP_Text scorePanelTimerText;
+    public GameObject bossHealthZone;
+    public Image healthImagePrefab;
 
     //
     private static LevelManager instance;
@@ -48,7 +51,7 @@ public class LevelManager : MonoBehaviour
         // If we have the GameManager load the correspondat level
         if(GameManager.Instance != null)
         {
-            //Debug.Log("Game manager present");
+            Debug.Log("Game manager present");
             levelDataSO = GameManager.Instance.levels[GameManager.Instance.currentLevelIndex];
         }
         //

@@ -110,6 +110,8 @@ public class EM_PlayerController : MonoBehaviour
         currentShield = maxShields;
         currentHealth = maxHealth;
         currentShieldBarFilled = maxShields;
+        //
+        finisherBarAnimator.gameObject.SetActive(false);
     }
 
     //
@@ -252,7 +254,10 @@ public class EM_PlayerController : MonoBehaviour
         currentFinisherEnergyFilled += Mathf.Sign(currentFinisherEnergy - currentFinisherEnergyFilled) * 3.5f * dt;
 
         //
-        finisherText.text = currentFinisherEnergy + "";
+        if (finisherText)
+        {
+            finisherText.text = currentFinisherEnergy + "";
+        }        
 
         // Shield bars
         if (shieldBarBack)
@@ -748,6 +753,7 @@ public class EM_PlayerController : MonoBehaviour
 
     public void GetFinisherEnergy(int energy = 1)
     {
+        finisherBarAnimator.gameObject.SetActive(true);
         currentFinisherEnergy++;
         // TODO:
         //finisherBarFront.fillAmount = (float)currentFinisherEnergy / 100f;

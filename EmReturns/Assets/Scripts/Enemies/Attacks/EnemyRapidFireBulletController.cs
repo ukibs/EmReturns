@@ -66,7 +66,7 @@ public class EnemyRapidFireBulletController : MonoBehaviour
         //    boss1EnergyBall.OnCollisionEnter(collision);
         //
         EM_PlayerController em_PlayerController = collision.collider.gameObject.GetComponent<EM_PlayerController>();
-        Debug.Log("EM Player controller: ", em_PlayerController);
+        //Debug.Log("EM Player controller: ", em_PlayerController);
         if(em_PlayerController)
         {
             em_PlayerController.ApplyDamage(50, false);

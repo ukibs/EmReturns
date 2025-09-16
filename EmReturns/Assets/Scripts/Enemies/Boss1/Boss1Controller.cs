@@ -501,8 +501,8 @@ public class Boss1Controller : MonoBehaviour
     void InitializeHealthBars()
     {
         currentHealth = maxHealth;
-        bossHealthZone = GameObject.Find("Boss Health Zone");
-        healthImagePrefab = GameObject.Find("Healthbar Front").GetComponent<Image>();
+        bossHealthZone = LevelManager.Instance.bossHealthZone;
+        healthImagePrefab = LevelManager.Instance.healthImagePrefab;
         healthImages = new Image[bossPhases.Length];
         for(int i = healthImages.Length - 1; i >= 0; i--)
         {

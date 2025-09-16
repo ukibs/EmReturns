@@ -6269,10 +6269,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 610055862}
     m_Modifications:
-    - target: {fileID: 2138624078317200702, guid: c6b77ea470c33af4fba8e4e580ae0f8e, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: e4af132dff1c2f0429748dfabdc4d85a, type: 3}
     - target: {fileID: 2138624079098046601, guid: c6b77ea470c33af4fba8e4e580ae0f8e, type: 3}
       propertyPath: m_Name
       value: Fade Panel
