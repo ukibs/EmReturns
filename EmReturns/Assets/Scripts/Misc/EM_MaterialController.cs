@@ -18,6 +18,8 @@ public class EM_MaterialController : MonoBehaviour
 
     public Animator emAnimator;
 
+    public ParticleSystem starBurst;
+
     private float intensity = 5f;
 
     // Start is called before the first frame update
@@ -73,6 +75,7 @@ public class EM_MaterialController : MonoBehaviour
         }
 
         //RenderSettings.skybox.SetColor("_SunDiscColor", bodyFCP.color);
+
     }
 
 
@@ -95,7 +98,8 @@ public class EM_MaterialController : MonoBehaviour
     IEnumerator WaitAndReturn()
     {
         emAnimator.SetTrigger("Color Saved");
-        yield return new WaitForSeconds(1);
+        starBurst.Play();
+        yield return new WaitForSeconds(2);
         //SceneManager.LoadScene(1);
         ImageFadeController.Instance.FadeAndGoToScene(1);
     }

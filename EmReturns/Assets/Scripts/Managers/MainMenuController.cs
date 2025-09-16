@@ -18,6 +18,10 @@ public class MainMenuController : MonoBehaviour
     public GameObject levelSelector;
     public TMP_Text[] bestTimesTexts;
 
+    public CanvasGroup logoGroup;
+    public CanvasGroup menuGroup;
+    public float fadeDuration = 1f;
+
     //
     private int currentClipIndex = 0;
     private bool checkVideo = false;
@@ -27,6 +31,18 @@ public class MainMenuController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //sets values of both main screens (logo and menu)
+
+        logoGroup.gameObject.SetActive(true);
+        logoGroup.alpha = 1;
+        logoGroup.interactable = true;
+        logoGroup.blocksRaycasts = true;
+
+        menuGroup.gameObject.SetActive(false);
+        menuGroup.alpha = 0;
+        menuGroup.interactable = false;
+        menuGroup.blocksRaycasts = false;
+
         //
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
@@ -35,6 +51,7 @@ public class MainMenuController : MonoBehaviour
             StartCoroutine(WaitAndCheck());
         //
         SetBestTimes();
+
     }
 
     // Update is called once per frame
@@ -49,9 +66,10 @@ public class MainMenuController : MonoBehaviour
             //
             if (gamepad.startButton.wasPressedThisFrame)
             {
+                StartCoroutine(Transition());
                 // SceneManager.LoadScene(1);
-                titleMenu.SetActive(false);
-                levelSelector.SetActive(true);
+                //titleMenu.SetActive(false);
+                //levelSelector.SetActive(true);
             }
             if (gamepad.selectButton.wasPressedThisFrame)
             {
@@ -64,9 +82,10 @@ public class MainMenuController : MonoBehaviour
             //
             if (keyboard.enterKey.wasPressedThisFrame || Mouse.current.leftButton.IsPressed())
             {
+                StartCoroutine(Transition());
                 // SceneManager.LoadScene(1);
-                titleMenu.SetActive(false);
-                levelSelector.SetActive(true);
+                //titleMenu.SetActive(false);
+                //levelSelector.SetActive(true);
             }
             if (keyboard.escapeKey.wasPressedThisFrame)
             {
@@ -155,5 +174,39 @@ public class MainMenuController : MonoBehaviour
                 bestTimesTexts[i].text = (i + 1) + " - " + score.letters + " - " + timeFormatted;
             }
         }
+    }
+
+    private IEnumerator Transition()
+    {
+        // Fade out logo
+        yield return StartCoroutine(FadeCanvasGroup(logoGroup, 1, 0));
+        logoGroup.gameObject.SetActive(false);
+
+        // Activate menu before fade in
+        menuGroup.gameObject.SetActive(true);
+        yield return StartCoroutine(FadeCanvasGroup(menuGroup, 0, 1));
+
+        // Activate interactability
+        menuGroup.interactable = true;
+        menuGroup.blocksRaycasts = true;
+    }
+
+    private IEnumerator FadeCanvasGroup(CanvasGroup group, float start, float end)
+    {
+        float elapsed = 0f;
+        group.alpha = start;
+
+        // Deactivate interactability while fade
+        group.interactable = false;
+        group.blocksRaycasts = false;
+
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            group.alpha = Mathf.Lerp(start, end, elapsed / fadeDuration);
+            yield return null;
+        }
+
+        group.alpha = end;
     }
 }
