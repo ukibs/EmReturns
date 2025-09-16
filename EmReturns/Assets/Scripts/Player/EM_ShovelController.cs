@@ -38,6 +38,7 @@ public class EM_ShovelController : MonoBehaviour
     public GameObject powerTrail;
     public GameObject finisherEnergyBall;
     public GameObject rapidFirePrefab;
+    public Animator emAnimator;
     [Header("Canvas")]
     public Image loadBar;
     [Header("Feedback")]
@@ -364,6 +365,8 @@ public class EM_ShovelController : MonoBehaviour
         hookedFakeRb = null;
         //
         AudioManager.Instance.StopLoadFx();
+        // Animations
+        emAnimator.SetBool("Sprinting", false);
     }
 
     //
@@ -372,7 +375,7 @@ public class EM_ShovelController : MonoBehaviour
         //
         if(nextState == ShovelsState.Idle)
         {            
-            ReturnShovelsToIdle();            
+            ReturnShovelsToIdle();
             return;
         }
         //
@@ -409,6 +412,7 @@ public class EM_ShovelController : MonoBehaviour
                 case ShovelsState.Sprint:
                     currentShovelPosturePositions = shovelPosturesPositions[2];
                     powerTrail.transform.localPosition = currentShovelPosturePositions.localPosition;
+                    emAnimator.SetBool("Sprinting", true);
                     powerTrail.SetActive(true);
                     AudioManager.Instance.PlayLoadFx(propulsionClip, true, 1);
                     EM_VoiceController.Instance.PlayVoiceGroup("sprint");
