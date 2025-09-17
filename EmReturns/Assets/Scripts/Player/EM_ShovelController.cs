@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,6 +40,8 @@ public class EM_ShovelController : MonoBehaviour
     public GameObject finisherEnergyBall;
     public GameObject rapidFirePrefab;
     public Animator emAnimator;
+    public GameObject hookedShovelsParent;
+    public GameObject[] shovelsToHide;
     [Header("Canvas")]
     public Image loadBar;
     [Header("Feedback")]
@@ -183,6 +186,7 @@ public class EM_ShovelController : MonoBehaviour
         //
         hookLineRenderer.SetPosition(0, transform.position);
         hookLineRenderer.SetPosition(1, currentShovelPosturePositions.position);
+        hookedShovelsParent.transform.position = currentShovelPosturePositions.position;
     }
 
     //
@@ -226,9 +230,14 @@ public class EM_ShovelController : MonoBehaviour
             //
             ChangeShovelsPosition(ShovelsState.Hooked);
             hookLineRenderer.gameObject.SetActive(true);
+            hookedShovelsParent.SetActive(true);
+            for(int i = 0; i < shovelsToHide.Length; i++) shovelsToHide[i].SetActive(false);
             //
             currentShovelPosturePositions.position = hitInfo.point;
             currentShovelPosturePositions.forward = -hitInfo.normal;
+            //hookedShovelsParent.transform.position = hitInfo.point;
+            //hookedShovelsParent.transform.forward = -hitInfo.normal;
+
             //currentShovelsState = ShovelsState.Hooked;
             //
             //for(int i = 0; i < shovels.Length; i++)
@@ -237,6 +246,7 @@ public class EM_ShovelController : MonoBehaviour
             //}
             //
             currentShovelPosturePositions.parent = hitInfo.transform;
+            //hookedShovelsParent.transform.parent = hitInfo.transform;
             //previousGrabbedObjectDistance = currentShovelPosturePositions.position - transform.position;
             previousGrabbedObjectDistance = Vector3.positiveInfinity;
             chekcingNearingGrabDistanceTicks = 0;
@@ -272,6 +282,8 @@ public class EM_ShovelController : MonoBehaviour
                 //EM_PlayerController.Instance.currentObjective = null;
                 EM_PlayerController.Instance.currentObjective = EM_PlayerController.Instance.cameraController.GetNearestBossSectionToScreenCenter();
                 hookLineRenderer.gameObject.SetActive(false);
+                hookedShovelsParent.SetActive(false);
+                for (int i = 0; i < shovelsToHide.Length; i++) shovelsToHide[i].SetActive(true);
             }
         }
         else
@@ -356,6 +368,8 @@ public class EM_ShovelController : MonoBehaviour
         currentShovelPosturePositions = null;
         //
         hookLineRenderer.gameObject.SetActive(false);
+        hookedShovelsParent.SetActive(false);
+        for (int i = 0; i < shovelsToHide.Length; i++) shovelsToHide[i].SetActive(true);
         //
         powerTrail.SetActive(false);
         //
@@ -367,6 +381,10 @@ public class EM_ShovelController : MonoBehaviour
         AudioManager.Instance.StopLoadFx();
         // Animations
         emAnimator.SetBool("Sprinting", false);
+        emAnimator.SetBool("Hovering", false);
+        emAnimator.SetBool("RapidFiring", false);
+        emAnimator.SetBool("LoadingChargeForward", false);
+        emAnimator.SetBool("LoadingPulseShot", false);
     }
 
     //
@@ -389,10 +407,12 @@ public class EM_ShovelController : MonoBehaviour
                     EM_VoiceController.Instance.PlayVoiceGroup("hook");
                     break;
                 case ShovelsState.HookingRB: 
-                    currentShovelPosturePositions = shovelPosturesPositions[1]; 
+                    currentShovelPosturePositions = shovelPosturesPositions[1];
+                    emAnimator.SetBool("LoadingPulseShot", true);
                     break;
                 case ShovelsState.LoadingPulseShot: 
                     currentShovelPosturePositions = shovelPosturesPositions[1];
+                    emAnimator.SetBool("LoadingPulseShot", true);
                     if (!hookedRb)
                     {
                         if (EM_PlayerController.Instance.FinisherLockAndLoaded)
@@ -420,6 +440,7 @@ public class EM_ShovelController : MonoBehaviour
                 case ShovelsState.VerticalImpulse:
                     currentShovelPosturePositions = shovelPosturesPositions[3];
                     powerTrail.transform.localPosition = currentShovelPosturePositions.localPosition;
+                    emAnimator.SetBool("Hovering", true);
                     powerTrail.SetActive(true);
                     AudioManager.Instance.PlayLoadFx(propulsionClip, true, 1);
                     EM_VoiceController.Instance.PlayVoiceGroup("vertical_impulse");
@@ -427,6 +448,7 @@ public class EM_ShovelController : MonoBehaviour
                 case ShovelsState.RapidFire:
                     //Debug.Log("Starting rapid fire");
                     currentShovelPosturePositions = shovelPosturesPositions[4];
+                    emAnimator.SetBool("RapidFiring", true);
                     StartCoroutine(RapidFireCoroutine());
                     break;
                 case ShovelsState.DownImpulse:
@@ -437,6 +459,7 @@ public class EM_ShovelController : MonoBehaviour
                     break;
                 case ShovelsState.LoadingChargeForward:
                     currentShovelPosturePositions = shovelPosturesPositions[6];
+                    emAnimator.SetBool("LoadingChargeForward", true);
                     AudioManager.Instance.PlayLoadFx(loadingClip, false, 1);
                     EM_VoiceController.Instance.PlayVoiceGroup("charge_load");
                     break;
