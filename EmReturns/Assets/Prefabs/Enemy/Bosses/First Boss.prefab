@@ -673,7 +673,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -8848810374240701247, guid: 3f6b94f44dea2f54db0276ef5ba10c22, type: 3}
+  - {fileID: -8848810374240701247, guid: ec6101e6ee543784bb35ae2e9c2500fb, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -789,6 +789,7 @@ MonoBehaviour:
   energyBallCooldown: 10
   energyShieldPreparation: 2
   energyShieldDuration: 5
+  maxHealth: 200
   combatMusic:
   - {fileID: 8300000, guid: 44fe3f0299f7b48478390c4d7b17cae4, type: 3}
   - {fileID: 8300000, guid: c0e46d9b3c528514e9b39a480e6074ce, type: 3}
@@ -811,6 +812,8 @@ MonoBehaviour:
   loadingLazerClip: {fileID: 8300000, guid: 2cfe9b989a6f0334ba4d87d43a788137, type: 3}
   shootingLazerClip: {fileID: 8300000, guid: c371bfbeb9245b0468ec598cd07d0e08, type: 3}
   headHitEffect: {fileID: 8300000, guid: 98de588fd9c4fc6468f2b4ff5e5c026e, type: 3}
+  bossHealthZone: {fileID: 0}
+  healthImagePrefab: {fileID: 0}
 --- !u!114 &2469443515863340925
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1260,7 +1263,7 @@ MonoBehaviour:
   launchForce: 50
   shootMaxOffset: 10
   minPlayerDistanceToActivateShields: 50
-  maxHealth: 5000
+  maxHealth: 3500
   shaderMeshRenderers:
   - {fileID: 2469443515303000612}
   - {fileID: 3856396755888264633}
@@ -2171,7 +2174,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: aa5d0c62c2a86364a9647963cb96a82a, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: -8848810374240701247, guid: 3f6b94f44dea2f54db0276ef5ba10c22, type: 3}
+      objectReference: {fileID: -8848810374240701247, guid: ec6101e6ee543784bb35ae2e9c2500fb, type: 3}
     - target: {fileID: 919132149155446097, guid: aa5d0c62c2a86364a9647963cb96a82a, type: 3}
       propertyPath: m_Name
       value: Fin 2
@@ -2370,7 +2373,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: aa5d0c62c2a86364a9647963cb96a82a, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: -8848810374240701247, guid: 3f6b94f44dea2f54db0276ef5ba10c22, type: 3}
+      objectReference: {fileID: -8848810374240701247, guid: ec6101e6ee543784bb35ae2e9c2500fb, type: 3}
     - target: {fileID: 919132149155446097, guid: aa5d0c62c2a86364a9647963cb96a82a, type: 3}
       propertyPath: m_Name
       value: Fin 4
@@ -2572,7 +2575,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: aa5d0c62c2a86364a9647963cb96a82a, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: -8848810374240701247, guid: 3f6b94f44dea2f54db0276ef5ba10c22, type: 3}
+      objectReference: {fileID: -8848810374240701247, guid: ec6101e6ee543784bb35ae2e9c2500fb, type: 3}
     - target: {fileID: 919132149155446097, guid: aa5d0c62c2a86364a9647963cb96a82a, type: 3}
       propertyPath: m_Name
       value: Fin 3
@@ -2863,7 +2866,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: aa5d0c62c2a86364a9647963cb96a82a, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: -8848810374240701247, guid: 3f6b94f44dea2f54db0276ef5ba10c22, type: 3}
+      objectReference: {fileID: -8848810374240701247, guid: ec6101e6ee543784bb35ae2e9c2500fb, type: 3}
     - target: {fileID: 919132149155446097, guid: aa5d0c62c2a86364a9647963cb96a82a, type: 3}
       propertyPath: m_Name
       value: Fin 1

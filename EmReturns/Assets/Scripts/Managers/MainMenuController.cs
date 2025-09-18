@@ -16,6 +16,7 @@ public class MainMenuController : MonoBehaviour
     [Header("Components")]
     public GameObject titleMenu;
     public GameObject levelSelector;
+    public GameObject bestTimesPanel;
     public TMP_Text[] bestTimesTexts;
 
     public CanvasGroup logoGroup;
@@ -116,10 +117,15 @@ public class MainMenuController : MonoBehaviour
             Debug.Log("Setting video - " + currentClipIndex);
         }
         //
-        if (Keyboard.current.pKey.wasPressedThisFrame)
+        if (Keyboard.current.mKey.wasPressedThisFrame)
         {
             PlayerPrefs.SetString("HighScores", "");
             Debug.Log("Scores deleted");
+        }
+        if (Keyboard.current.pKey.wasPressedThisFrame)
+        {
+            if (bestTimesPanel.activeSelf) bestTimesPanel.SetActive(false);
+            else bestTimesPanel.SetActive(true);
         }
     }
 

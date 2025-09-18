@@ -193,6 +193,8 @@ public class Boss1SegmentController : MonoBehaviour
 
     public void Restore()
     {
+        damaged = false;
+        currentHealth = maxHealth;
         for (int i = 0; i < shaderMeshRenderers.Length; i++)
         {
             //shaderMeshRenderers[i].material = boss1Controller.healthyMaterial;
@@ -200,9 +202,7 @@ public class Boss1SegmentController : MonoBehaviour
             shaderMeshRenderers[i].GetPropertyBlock(mpb);
             mpb.SetFloat("_Transition", 1 - ((float)currentHealth / (float)maxHealth));
             shaderMeshRenderers[i].SetPropertyBlock(mpb);
-        }
-        damaged = false;
-        currentHealth = maxHealth;
+        }        
     }
 
     #region Attack Balls Methods

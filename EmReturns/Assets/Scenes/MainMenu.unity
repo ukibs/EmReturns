@@ -305,6 +305,7 @@ MonoBehaviour:
   randomOrder: 1
   titleMenu: {fileID: 793517134}
   levelSelector: {fileID: 1389088049}
+  bestTimesPanel: {fileID: 326385944}
   bestTimesTexts:
   - {fileID: 1612755305}
   - {fileID: 26276420}

@@ -34,19 +34,19 @@ public class ImageFadeController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Keyboard.current.oKey.wasPressedThisFrame)
-        {
-            if (lastFadeDirection == -1)
-            {
-                StartCoroutine(FadeCoroutine(1));
-                lastFadeDirection = 1;
-            }
-            else
-            {
-                StartCoroutine(FadeCoroutine(-1));
-                lastFadeDirection = -1;
-            }
-        }
+        //if (Keyboard.current.oKey.wasPressedThisFrame)
+        //{
+        //    if (lastFadeDirection == -1)
+        //    {
+        //        StartCoroutine(FadeCoroutine(1));
+        //        lastFadeDirection = 1;
+        //    }
+        //    else
+        //    {
+        //        StartCoroutine(FadeCoroutine(-1));
+        //        lastFadeDirection = -1;
+        //    }
+        //}
     }
 
     public void FadeAndGoToScene(int sceneIndex)

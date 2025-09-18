@@ -1051,7 +1051,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2488709409880194933
 Transform:
   m_ObjectHideFlags: 0
@@ -3373,7 +3373,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hookForce: 100
-  pulseForce: 1000
+  pulseForce: 500
   sprintForce: 25
   rapidFireForce: 100
   shovels:
@@ -4847,7 +4847,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6683366442549401784
 Transform:
   m_ObjectHideFlags: 0
@@ -5241,7 +5241,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6278546114450358684, guid: 80027b188e3188243b545fea817a5a57, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.339
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6278546114450358684, guid: 80027b188e3188243b545fea817a5a57, type: 3}
       propertyPath: m_LocalRotation.w

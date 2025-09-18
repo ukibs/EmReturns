@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -261,6 +259,11 @@ public class EM_ShovelController : MonoBehaviour
     void HookAtraction()
     {
         //
+        if (!currentShovelPosturePositions)
+        {
+            Debug.LogError("Hook point destroyed");
+            return;
+        }
         Vector3 hookDirection = currentShovelPosturePositions.position - transform.position;
         Debug.DrawLine(currentShovelPosturePositions.position, transform.position, Color.blue);
         if (grabbingDistanceIndicator)

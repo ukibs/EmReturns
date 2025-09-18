@@ -446,7 +446,7 @@ public class EM_PlayerController : MonoBehaviour
         //
         Vector3 movementDirection = (directionX + directionZ).normalized;
         //
-        CheckAndLook(movementDirection);        
+        CheckAndLook(movementDirection);
         //
         rb.AddForce(movementDirection * movementForce);
         
@@ -557,17 +557,52 @@ public class EM_PlayerController : MonoBehaviour
             if(shovelController.currentShovelsState == EM_ShovelController.ShovelsState.RapidFire)
             {
                 Rigidbody rapidFireRb = shovelController.rapidFirePrefab.GetComponent<Rigidbody>();
-                FakeRigidbody fakeRigidbody = currentObjective.gameObject.GetComponent<FakeRigidbody>();
-                Boss1SegmentController boss1SegmentController = currentObjective.gameObject.GetComponent <Boss1SegmentController>();
+                Boss1SegmentController boss1SegmentController = currentObjective.gameObject.GetComponent<Boss1SegmentController>();
+                if (!boss1SegmentController)
+                {
+                    Debug.LogError("No segment controller");
+                    transform.LookAt(currentObjective);
+                    return;
+                }
                 float timeToReach = GeneralFunctions.EstimateTimeBetweenTwoPoints(
-                    transform.position, fakeRigidbody.transform.position, shovelController.rapidFireForce / rapidFireRb.mass);
+                    transform.position, boss1SegmentController.transform.position, shovelController.rapidFireForce / rapidFireRb.mass);
                 //Debug.Log("Time to reach: " + timeToReach);
                 Vector3 bossVelocity = boss1SegmentController.Velocity;
                 Vector3 hazardFuturePosition = GeneralFunctions.EstimateFuturePosition(
-                    fakeRigidbody.transform.position, 
-                    fakeRigidbody.currentVelocity + bossVelocity, 
+                    boss1SegmentController.transform.position,
+                    bossVelocity, 
+                    timeToReach                    
+                    );
+                transform.LookAt(hazardFuturePosition);
+            }
+            else if(
+                shovelController.currentShovelsState == EM_ShovelController.ShovelsState.LoadingPulseShot ||
+                shovelController.currentShovelsState == EM_ShovelController.ShovelsState.LoadingChargeForward
+            )
+            {
+                // Rigidbody pulseShotRb = shovelController.energyPulseAttackPrefab.GetComponent<Rigidbody>();
+                Boss1SegmentController boss1SegmentController = currentObjective.gameObject.GetComponent<Boss1SegmentController>();
+                Boss1Controller boss1Controller = currentObjective.gameObject.GetComponent<Boss1Controller>();
+                //
+                if(!boss1SegmentController && !boss1Controller)
+                {
+                    Debug.LogError("No segment nor boss controller");
+                    transform.LookAt(currentObjective);
+                    return;
+                }
+                //
+                Vector3 objectivePosition = boss1SegmentController ? boss1SegmentController.transform.position : boss1Controller.transform.position;
+                Vector3 objectiveVelocity = boss1SegmentController ? boss1SegmentController.Velocity : boss1Controller.Velocity;
+                //
+                float loadAmountToUse = finisherActive ? 1 : shovelController.loadAmount;
+                float timeToReach = GeneralFunctions.EstimateTimeBetweenTwoPoints(
+                    transform.position, objectivePosition, shovelController.pulseForce * loadAmountToUse / 1);
+                //Debug.Log("Time to reach: " + timeToReach);
+                // Vector3 bossVelocity = boss1SegmentController.Velocity;
+                Vector3 hazardFuturePosition = GeneralFunctions.EstimateFuturePosition(
+                    objectivePosition,
+                    objectiveVelocity,
                     timeToReach
-                    
                     );
                 transform.LookAt(hazardFuturePosition);
             }
@@ -806,6 +841,7 @@ public class EM_PlayerController : MonoBehaviour
                 finisherActive = false;
                 //finisherBarAnimator.SetBool("Full", false);
                 finisherBarAnimator.SetBool("Active", false);
+                currentObjective = null;
             }
         }            
     }

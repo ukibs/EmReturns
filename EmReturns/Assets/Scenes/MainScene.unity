@@ -3925,6 +3925,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 72443349}
     - target: {fileID: 6244736362935794266, guid: 8d7135b273ee9b947b19874f580a7eda, type: 3}
+      propertyPath: pulseForce
+      value: 750
+      objectReference: {fileID: 0}
+    - target: {fileID: 6244736362935794266, guid: 8d7135b273ee9b947b19874f580a7eda, type: 3}
       propertyPath: hookLineRenderer
       value: 
       objectReference: {fileID: 1572174881}

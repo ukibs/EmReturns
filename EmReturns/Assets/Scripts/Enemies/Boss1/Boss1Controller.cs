@@ -84,6 +84,14 @@ public class Boss1Controller : MonoBehaviour
 
     //
     public float MovementSpeed { get { return bossPhases[currentPhase].behaviours[currentBehaviourIndex].movementSpeed; } }
+    public Vector3 Velocity
+    {
+        get
+        {
+            Vector3 velocity = transform.forward * bossPhases[currentPhase].behaviours[currentBehaviourIndex].movementSpeed;
+            return velocity;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -343,7 +351,7 @@ public class Boss1Controller : MonoBehaviour
         //currentBehaviourIndex = 2;
         
         currentHealth -= 10;
-        Debug.Log("On damaged segment, current health: " + currentHealth);
+        //Debug.Log("On damaged segment, current health: " + currentHealth);
         UpdateHealthBar();
     }
 
