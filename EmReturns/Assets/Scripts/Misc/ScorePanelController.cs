@@ -28,6 +28,7 @@ public class ScorePanelController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // TODO: Implementar InputController de direcciones con was pressed this frame
         if (Gamepad.current != null)
         {
             //if(Gamepad.current.crossButton.)

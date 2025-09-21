@@ -15,7 +15,7 @@ public class ImageFadeController : MonoBehaviour
     public AudioClip fadeOutClip;
 
     private static ImageFadeController instance;
-    private int lastFadeDirection = -1;
+    //private int lastFadeDirection = -1;
 
     public static ImageFadeController Instance
     {
@@ -34,19 +34,7 @@ public class ImageFadeController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (Keyboard.current.oKey.wasPressedThisFrame)
-        //{
-        //    if (lastFadeDirection == -1)
-        //    {
-        //        StartCoroutine(FadeCoroutine(1));
-        //        lastFadeDirection = 1;
-        //    }
-        //    else
-        //    {
-        //        StartCoroutine(FadeCoroutine(-1));
-        //        lastFadeDirection = -1;
-        //    }
-        //}
+
     }
 
     public void FadeAndGoToScene(int sceneIndex)

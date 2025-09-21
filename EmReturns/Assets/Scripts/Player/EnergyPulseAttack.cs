@@ -16,7 +16,7 @@ public class EnergyPulseAttack : MonoBehaviour
     //
     private int currentStep = 0;
     private bool launched = false;
-    private Collider collider;
+    private Collider energyPulseCollider;
     private Rigidbody rb;
     private TrailRenderer trailRenderer;
     //private int startingStep = 0;
@@ -25,7 +25,7 @@ public class EnergyPulseAttack : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        collider = GetComponent<Collider>();
+        energyPulseCollider = GetComponent<Collider>();
         rb = GetComponent<Rigidbody>();
         trailRenderer = GetComponent<TrailRenderer>();
     }
@@ -72,7 +72,7 @@ public class EnergyPulseAttack : MonoBehaviour
         GameObject impactParticles = Instantiate(impactParticlesPrefab, transform.position, Quaternion.LookRotation(contactPoint.normal));
         //
         rb.velocity = Vector3.zero;
-        collider.isTrigger = true;
+        energyPulseCollider.isTrigger = true;
         launched = true;
     }
 

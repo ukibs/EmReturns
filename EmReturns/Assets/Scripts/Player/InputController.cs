@@ -27,13 +27,13 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            //Debug.Log(gamepad);
+            Vector2 axisValue = Vector2.zero;
             if (gamepad != null)
             {
                 //Debug.Log(gamepad.leftStick.ReadValue());
-                return gamepad.leftStick.ReadValue();
+                axisValue += gamepad.leftStick.ReadValue();
             }
-            else if(keyboard != null)
+            if(keyboard != null)
             {
 
                 //Debug.Log("Getting keyboard");
@@ -48,12 +48,9 @@ public class InputController : MonoBehaviour
 
                 //Debug.Log(horizontalAxis + " - " + verticalAxis);
 
-                return new Vector2(horizontalAxis, verticalAxis);
+                axisValue += new Vector2(horizontalAxis, verticalAxis);
             }
-            else
-            {
-                return Vector2.zero;
-            }
+            return axisValue;
         }
     }
 
@@ -62,19 +59,17 @@ public class InputController : MonoBehaviour
     {
         get
         {
+            Vector2 axisValue = Vector2.zero;
             if (gamepad != null)
             {
                 Vector2 move = gamepad.rightStick.ReadValue();
                 move = new Vector2(Mathf.Pow(move.x, 2) * Mathf.Sign(move.x), Mathf.Pow(move.y, 2) * Mathf.Sign(move.y));
-                return move;
+                axisValue += move;
             }
-            else if(mouse != null) { 
-                return mouse.delta.ReadValue() * 0.1f;
+            if(mouse != null) { 
+                axisValue += mouse.delta.ReadValue() * 0.1f;
             }
-            else
-            {
-                return Vector2.zero;
-            }
+            return axisValue;
         }
     }
 
@@ -85,17 +80,8 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            if(gamepad != null)
-            {
-                return gamepad.rightTrigger.wasPressedThisFrame;
-            }
-            else if(mouse != null){
-                return mouse.leftButton.wasPressedThisFrame;
-            }
-            else
-            {
-                return false;
-            }
+            return (gamepad!= null && gamepad.rightTrigger.wasPressedThisFrame) ||
+                (mouse != null && mouse.leftButton.wasPressedThisFrame);
         }
     }
 
@@ -103,18 +89,8 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            if (gamepad != null)
-            {
-                return gamepad.rightTrigger.wasReleasedThisFrame;
-            }
-            else if (mouse != null)
-            {
-                return mouse.leftButton.wasReleasedThisFrame;
-            }
-            else
-            {
-                return false;
-            }
+            return (gamepad != null && gamepad.rightTrigger.wasReleasedThisFrame) ||
+                (mouse != null && mouse.leftButton.wasReleasedThisFrame);
         }
     }
 
@@ -123,18 +99,8 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            if (gamepad != null)
-            {
-                return gamepad.leftShoulder.wasPressedThisFrame;
-            }
-            else if (mouse != null)
-            {
-                return keyboard.qKey.wasPressedThisFrame;
-            }
-            else
-            {
-                return false;
-            }
+            return (gamepad != null && gamepad.leftShoulder.wasPressedThisFrame) ||
+                (mouse != null && keyboard.qKey.wasPressedThisFrame);
         }
     }
 
@@ -142,18 +108,8 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            if (gamepad != null)
-            {
-                return gamepad.leftShoulder.wasReleasedThisFrame;
-            }
-            else if (mouse != null)
-            {
-                return keyboard.qKey.wasReleasedThisFrame;
-            }
-            else
-            {
-                return false;
-            }
+            return (gamepad != null && gamepad.leftShoulder.wasReleasedThisFrame) ||
+                (mouse != null && keyboard.qKey.wasReleasedThisFrame);
         }
     }
 
@@ -162,18 +118,8 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            if (gamepad != null)
-            {
-                return gamepad.leftTrigger.wasPressedThisFrame;
-            }
-            else if (mouse != null)
-            {
-                return keyboard.eKey.wasPressedThisFrame;
-            }
-            else
-            {
-                return false;
-            }
+            return (gamepad != null && gamepad.leftTrigger.wasPressedThisFrame) ||
+                (mouse != null && keyboard.eKey.wasPressedThisFrame);
         }
     }
 
@@ -181,18 +127,8 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            if (gamepad != null)
-            {
-                return gamepad.leftTrigger.wasReleasedThisFrame;
-            }
-            else if (mouse != null)
-            {
-                return keyboard.eKey.wasReleasedThisFrame;
-            }
-            else
-            {
-                return false;
-            }
+            return (gamepad != null && gamepad.leftTrigger.wasReleasedThisFrame) ||
+                (mouse != null && keyboard.eKey.wasReleasedThisFrame);
         }
     }
 
@@ -201,18 +137,8 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            if (gamepad != null)
-            {
-                return gamepad.rightShoulder.wasPressedThisFrame;
-            }
-            else if (mouse != null)
-            {
-                return mouse.rightButton.wasPressedThisFrame;
-            }
-            else
-            {
-                return false;
-            }
+            return (gamepad != null && gamepad.rightShoulder.wasPressedThisFrame) ||
+                (mouse != null && mouse.rightButton.wasPressedThisFrame);
         }
     }
 
@@ -220,18 +146,8 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            if (gamepad != null)
-            {
-                return gamepad.rightShoulder.wasReleasedThisFrame;
-            }
-            else if (mouse != null)
-            {
-                return mouse.rightButton.wasReleasedThisFrame;
-            }
-            else
-            {
-                return false;
-            }
+            return (gamepad != null && gamepad.rightShoulder.wasReleasedThisFrame) ||
+                (mouse != null && mouse.rightButton.wasReleasedThisFrame);
         }
     }
 
@@ -240,18 +156,8 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            if (gamepad != null)
-            {
-                return gamepad.aButton.wasPressedThisFrame;
-            }
-            else if (keyboard != null)
-            {
-                return keyboard.spaceKey.wasPressedThisFrame;
-            }
-            else
-            {
-                return false;
-            }
+            return (gamepad != null && gamepad.aButton.wasPressedThisFrame) ||
+                (mouse != null && keyboard.spaceKey.wasPressedThisFrame);
         }
     }
 
@@ -259,18 +165,8 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            if (gamepad != null)
-            {
-                return gamepad.aButton.wasReleasedThisFrame;
-            }
-            else if (keyboard != null)
-            {
-                return keyboard.spaceKey.wasReleasedThisFrame;
-            }
-            else
-            {
-                return false;
-            }
+            return (gamepad != null && gamepad.aButton.wasReleasedThisFrame) ||
+                (mouse != null && keyboard.spaceKey.wasReleasedThisFrame);
         }
     }
 
@@ -279,18 +175,8 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            if (gamepad != null)
-            {
-                return gamepad.yButton.wasPressedThisFrame;
-            }
-            else if (keyboard != null)
-            {
-                return keyboard.leftCtrlKey.wasPressedThisFrame;
-            }
-            else
-            {
-                return false;
-            }
+            return (gamepad != null && gamepad.yButton.wasPressedThisFrame) ||
+                (mouse != null && keyboard.leftCtrlKey.wasPressedThisFrame);
         }
     }
 
@@ -298,18 +184,8 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            if (gamepad != null)
-            {
-                return gamepad.yButton.wasReleasedThisFrame;
-            }
-            else if (keyboard != null)
-            {
-                return keyboard.leftCtrlKey.wasReleasedThisFrame;
-            }
-            else
-            {
-                return false;
-            }
+            return (gamepad != null && gamepad.yButton.wasReleasedThisFrame) ||
+                (mouse != null && keyboard.leftCtrlKey.wasReleasedThisFrame);
         }
     }
 
@@ -318,18 +194,8 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            if (gamepad != null)
-            {
-                return gamepad.bButton.wasPressedThisFrame;
-            }
-            else if (keyboard != null)
-            {
-                return keyboard.leftShiftKey.wasPressedThisFrame;
-            }
-            else
-            {
-                return false;
-            }
+            return (gamepad != null && gamepad.bButton.wasPressedThisFrame) ||
+                (mouse != null && keyboard.leftShiftKey.wasPressedThisFrame);
         }
     }
 
@@ -337,18 +203,8 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            if (gamepad != null)
-            {
-                return gamepad.bButton.wasReleasedThisFrame;
-            }
-            else if (keyboard != null)
-            {
-                return keyboard.leftShiftKey.wasReleasedThisFrame;
-            }
-            else
-            {
-                return false;
-            }
+            return (gamepad != null && gamepad.bButton.wasReleasedThisFrame) ||
+                (mouse != null && keyboard.leftShiftKey.wasReleasedThisFrame);
         }
     }
 
@@ -357,18 +213,8 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            if (gamepad != null)
-            {
-                return gamepad.rightStickButton.wasPressedThisFrame;
-            }
-            else if (keyboard != null)
-            {
-                return keyboard.tabKey.wasPressedThisFrame;
-            }
-            else
-            {
-                return false;
-            }
+            return (gamepad != null && gamepad.rightStickButton.wasPressedThisFrame) ||
+                (mouse != null && keyboard.tabKey.wasPressedThisFrame);
         }
     }
 
@@ -377,18 +223,8 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            if (gamepad != null)
-            {
-                return gamepad.startButton.wasPressedThisFrame;
-            }
-            else if (keyboard != null)
-            {
-                return keyboard.escapeKey.wasPressedThisFrame;
-            }
-            else
-            {
-                return false;
-            }
+            return (gamepad != null && gamepad.startButton.wasPressedThisFrame) ||
+                (mouse != null && keyboard.escapeKey.wasPressedThisFrame);
         }
     }
 
@@ -397,18 +233,8 @@ public class InputController : MonoBehaviour
     {
         get
         {
-            if (gamepad != null)
-            {
-                return gamepad.selectButton.wasPressedThisFrame;
-            }
-            else if (keyboard != null)
-            {
-                return keyboard.enterKey.wasPressedThisFrame;
-            }
-            else
-            {
-                return false;
-            }
+            return (gamepad != null && gamepad.selectButton.wasPressedThisFrame) ||
+                (mouse != null && keyboard.enterKey.wasPressedThisFrame);
         }
     }
 
@@ -424,16 +250,14 @@ public class InputController : MonoBehaviour
     void Update()
     {
         gamepad = Gamepad.current;
+        //Debug.Log("Gamepad: " + gamepad);
         keyboard = Keyboard.current;
         mouse = Mouse.current;
-        //
-        if (gamepad != null && gamepad.leftStickButton.wasPressedThisFrame)
-        {
-            cameraDirection *= -1;
-        }
-        //
-        if (keyboard != null && keyboard.digit1Key.wasPressedThisFrame)
-        {
+        // Arreglo para dirección de cámara
+        if (
+            (gamepad != null && gamepad.leftStickButton.wasPressedThisFrame) ||
+            (keyboard != null && keyboard.digit1Key.wasPressedThisFrame)
+        ){
             cameraDirection *= -1;
         }
     }

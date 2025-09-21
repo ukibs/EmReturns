@@ -38,10 +38,6 @@ public class CameraController : MonoBehaviour
     {
         float dt = Time.deltaTime;
 
-        //var gamepad = Gamepad.current;
-        //if (gamepad == null)
-        //    return; // No gamepad connected.
-
         //
         if (playerController.currentObjective)
         {
@@ -76,25 +72,16 @@ public class CameraController : MonoBehaviour
             xPivot.localPosition = Vector3.Lerp(nearPosition, farPosition, lerpT);
         }
 
-        //
-        //if (gamepad.leftStickButton.wasPressedThisFrame)
-        //{
-        //    cameraDirection *= -1;
-        //}
     }
 
     //
     void UpdateCameraMovement(float dt)
     {
         // Movimiento
-        //Vector2 move = gamepad.rightStick.ReadValue();
         Vector2 move = InputController.Instance.CameraAxis;
-        //move = new Vector2(Mathf.Pow(move.x, 2) * Mathf.Sign(move.x), Mathf.Pow(move.y, 2) * Mathf.Sign(move.y));
-        //Debug.Log(move);
         //
         transform.Rotate(Vector3.up, move.x * rotationSpeed.x * dt);
         //
-        //xPivot.Rotate(Vector3.right, move.y * rotationSpeed.y * dt);
         transform.Rotate(Vector3.right, move.y * InputController.Instance.CameraDirection * rotationSpeed.y * dt);
         //
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);

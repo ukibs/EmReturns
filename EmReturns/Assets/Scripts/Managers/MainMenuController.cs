@@ -26,8 +26,8 @@ public class MainMenuController : MonoBehaviour
     //
     private int currentClipIndex = 0;
     private bool checkVideo = false;
-    private Gamepad gamepad;
-    private Keyboard keyboard;
+    //private Gamepad gamepad;
+    //private Keyboard keyboard;
 
     // Start is called before the first frame update
     void Start()
@@ -59,40 +59,17 @@ public class MainMenuController : MonoBehaviour
     void Update()
     {
         //
-        gamepad = Gamepad.current;
-        keyboard = Keyboard.current;
-        //
-        if(gamepad != null)
+        if (InputController.Instance.PausePressed || Mouse.current.leftButton.wasPressedThisFrame)
         {
-            //
-            if (gamepad.startButton.wasPressedThisFrame)
-            {
-                StartCoroutine(Transition());
-                // SceneManager.LoadScene(1);
-                //titleMenu.SetActive(false);
-                //levelSelector.SetActive(true);
-            }
-            if (gamepad.selectButton.wasPressedThisFrame)
-            {
-                Application.Quit();
-            }
+            StartCoroutine(Transition());
+            // SceneManager.LoadScene(1);
+            //titleMenu.SetActive(false);
+            //levelSelector.SetActive(true);
         }
-        //
-        if(keyboard != null)
+        if (InputController.Instance.ExitPressed)
         {
-            //
-            if (keyboard.enterKey.wasPressedThisFrame || Mouse.current.leftButton.IsPressed())
-            {
-                StartCoroutine(Transition());
-                // SceneManager.LoadScene(1);
-                //titleMenu.SetActive(false);
-                //levelSelector.SetActive(true);
-            }
-            if (keyboard.escapeKey.wasPressedThisFrame)
-            {
-                Application.Quit();
-            }
-        }        
+            Application.Quit();
+        }
         //
         if (checkVideo && !videoPlayer.isPlaying)
         {
