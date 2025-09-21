@@ -1,10 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
@@ -37,6 +34,7 @@ public class LevelManager : MonoBehaviour
     private int enemiesDefeated = 0;
     private float fightStartTime = 0;
     private float fightEndTime = 0;
+    private bool gameEnded = false;
 
     //
     public static LevelManager Instance { get { return instance; } }
@@ -49,7 +47,7 @@ public class LevelManager : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         // If we have the GameManager load the correspondat level
-        if(GameManager.Instance != null)
+        if (GameManager.Instance != null)
         {
             Debug.Log("Game manager present");
             levelDataSO = GameManager.Instance.levels[GameManager.Instance.currentLevelIndex];
@@ -60,10 +58,11 @@ public class LevelManager : MonoBehaviour
             Instantiate(levelDataSO.enemyToSpawn, new Vector3(0, 500, 1000), Quaternion.identity);
         }
         //
-        if(levelDataSO.musicClip)
+        if (levelDataSO.musicClip)
             AudioManager.Instance.PlayMusic(levelDataSO.musicClip);
         //
-        if (levelDataSO.enemyWaves.Length > 0) {
+        if (levelDataSO.enemyWaves.Length > 0)
+        {
             enemySpawner.SpawnEnemyWave(levelDataSO.enemyWaves[currentEnemyWave]);
             enemyWavesPanel.SetActive(true);
             waveText.text = "Wave " + 1;
@@ -78,6 +77,14 @@ public class LevelManager : MonoBehaviour
         //if (gamepad == null)
         //    return; // No gamepad connected.
         //
+        if(gameEnded)
+        {
+            if (InputController.Instance.ExitPressed)
+            {
+                //SceneManager.LoadScene(1);
+                ImageFadeController.Instance.FadeAndGoToScene(1);
+            }
+        }
         if (InputController.Instance.PausePressed)
         {
             if (endPanel.activeSelf || scorePanel.activeSelf)
@@ -95,7 +102,7 @@ public class LevelManager : MonoBehaviour
             }
         }
         //
-        if(InputController.Instance.ExitPressed && instructionsPanel.activeSelf)
+        if (InputController.Instance.ExitPressed && instructionsPanel.activeSelf)
         {
             //SceneManager.LoadScene(1);
             ImageFadeController.Instance.FadeAndGoToScene(1);
@@ -114,13 +121,14 @@ public class LevelManager : MonoBehaviour
     //
     public void EndLevel(bool victory)
     {
-        if(fightEndTime == 0)
+        if (fightEndTime == 0)
         {
             endPanel.SetActive(true);
-        }        
+        }
         SetEndMusic(victory);
         string message = victory ? "VICTORY" : "DEFEAT";
         SetEndMessage(message);
+        gameEnded = true;
     }
 
     //
@@ -131,18 +139,18 @@ public class LevelManager : MonoBehaviour
 
     public void SetEndMusic(bool victory)
     {
-        if (victory)    AudioManager.Instance.PlayMusic(victoryClip, 1f, false);
-        else            AudioManager.Instance.PlayMusic(defeatClip, 1f, true);
+        if (victory) AudioManager.Instance.PlayMusic(victoryClip, 1f, false);
+        else AudioManager.Instance.PlayMusic(defeatClip, 1f, true);
     }
 
     public void EnemyDefeated()
     {
         enemiesDefeated++;
         remainigEnemiesText.text = "Enemies " + enemiesDefeated + "/" + levelDataSO.enemyWaves[currentEnemyWave].amount;
-        if(enemiesDefeated >= levelDataSO.enemyWaves[currentEnemyWave].amount)
+        if (enemiesDefeated >= levelDataSO.enemyWaves[currentEnemyWave].amount)
         {
             Debug.Log("Checking wave " + currentEnemyWave + " - " + levelDataSO.enemyWaves.Length);
-            if(currentEnemyWave + 1 < levelDataSO.enemyWaves.Length)
+            if (currentEnemyWave + 1 < levelDataSO.enemyWaves.Length)
             {
                 currentEnemyWave++;
                 enemiesDefeated = 0;
@@ -195,7 +203,7 @@ public class LevelManager : MonoBehaviour
                 Score score = new Score(scoreDisected[0], float.Parse(scoreDisected[1]));
                 scoreList.Add(score);
             }
-        }        
+        }
         // Add the new one
         float totalFightTime = fightEndTime - fightStartTime;
         Score newScore = new Score(scorePanelController.Initials, totalFightTime);
